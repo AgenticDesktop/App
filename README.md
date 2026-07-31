@@ -21,7 +21,7 @@ A WinUI 3-based ACP (Agent Communication Protocol) desktop client that provides 
 | Windows App SDK | 2.3.1 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary  | 0.1.0-beta.3 |
+| ShihaoShen.Agentic.ACPLibrary | 0.1.0-beta.3 |
 
 ## System Requirements
 
@@ -52,7 +52,7 @@ winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 
 ## Project Structure
 
-```
+```plaintext
 App/
 ├── ViewModels/          # MVVM view models
 │   ├── ChatViewModel.cs         # Chat logic, streaming message handling
@@ -76,7 +76,7 @@ App/
 
 The application uses the MVVM architecture and communicates with Agents through the `IAcpClient` interface:
 
-```
+```plaintext
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │  WinUI UI   │────▶│   ViewModels     │────▶│   AcpClient     │
 │  (XAML)     │◀────│  (CommunityToolkit)│◀────│  (ACP Library)  │

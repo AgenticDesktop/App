@@ -52,7 +52,7 @@ winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 
 ## プロジェクト構造
 
-```
+```plaintext
 App/
 ├── ViewModels/          # MVVM ビューモデル
 │   ├── ChatViewModel.cs         # チャットロジック、ストリーミングメッセージ処理
@@ -76,7 +76,7 @@ App/
 
 アプリケーションは MVVM アーキテクチャを採用し、`IAcpClient` インターフェースを通じて Agent と通信します：
 
-```
+```plaintext
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │  WinUI UI   │────▶│   ViewModels     │────▶│   AcpClient     │
 │  (XAML)     │◀────│  (CommunityToolkit)│◀────│  (ACP Library)  │

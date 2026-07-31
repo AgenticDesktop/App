@@ -16,12 +16,12 @@
 ## 技術堆疊
 
 | 元件 | 版本 |
-|------|------|
+| ------ | ------ |
 | .NET | 10.0 |
 | Windows App SDK | 2.3.1 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary  | 0.1.0-beta.3 |
+| ShihaoShen.Agentic.ACPLibrary | 0.1.0-beta.3 |
 
 ## 系統需求
 
@@ -32,7 +32,7 @@
 
 ## 快速開始
 
-```powershell
+```plaintext
 # 複製儲存庫
 git clone https://github.com/AgenticDesktop/App.git
 cd App
@@ -52,7 +52,7 @@ winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 
 ## 專案結構
 
-```
+```plaintext
 App/
 ├── ViewModels/          # MVVM 檢視模型
 │   ├── ChatViewModel.cs         # 聊天邏輯、串流訊息處理
@@ -76,7 +76,7 @@ App/
 
 應用程式採用 MVVM 架構，透過 `IAcpClient` 介面與 Agent 通訊：
 
-```
+```plaintext
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │  WinUI UI   │────▶│   ViewModels     │────▶│   AcpClient     │
 │  (XAML)     │◀────│  (CommunityToolkit)│◀────│  (ACP Library)  │

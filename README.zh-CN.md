@@ -16,12 +16,12 @@
 ## 技术栈
 
 | 组件 | 版本 |
-|------|------|
+| ------ | ------ |
 | .NET | 10.0 |
 | Windows App SDK | 2.3.1 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary  | 0.1.0-beta.3 |
+| ShihaoShen.Agentic.ACPLibrary | 0.1.0-beta.3 |
 
 ## 系统要求
 
@@ -52,7 +52,7 @@ winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 
 ## 项目结构
 
-```
+```plaintext
 App/
 ├── ViewModels/          # MVVM 视图模型
 │   ├── ChatViewModel.cs         # 聊天逻辑、流式消息处理
@@ -76,7 +76,7 @@ App/
 
 应用采用 MVVM 架构，通过 `IAcpClient` 接口与 Agent 通信：
 
-```
+```plaintext
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
 │  WinUI UI   │────▶│   ViewModels     │────▶│   AcpClient     │
 │  (XAML)     │◀────│  (CommunityToolkit)│◀────│  (ACP Library)  │
