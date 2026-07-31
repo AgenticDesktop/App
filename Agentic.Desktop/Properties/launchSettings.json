@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Agentic.Desktop (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Agentic.Desktop (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentDialog
+    x:Class="Agentic.Desktop.Views.PermissionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Agentic.ACPLibrary.Models"
+    mc:Ignorable="d"
+    Title="Permission Request"
+    PrimaryButtonText="Allow"
+    CloseButtonText="Reject"
+    DefaultButton="Primary">
+
+    <StackPanel Spacing="12">
+        <TextBlock Text="The agent wants to perform the following action:"
+                   TextWrapping="Wrap"/>
+
+        <!-- 工具调用详情 -->
+        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1" CornerRadius="8" Padding="12">
+            <StackPanel Spacing="4">
+                <TextBlock x:Name="ToolTitle" FontWeight="SemiBold"/>
+                <TextBlock x:Name="ToolKind" Foreground="{ThemeResource SystemAccentColor}"
+                           FontSize="12"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 权限选项（动态生成） -->
+        <ItemsRepeater x:Name="OptionsRepeater">
+            <ItemsRepeater.ItemTemplate>
+                <DataTemplate x:DataType="models:PermissionOption">
+                    <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                            AutomationProperties.AutomationId="{x:Bind OptionId, Mode=OneWay}"
+                            Click="OnOptionClicked" Tag="{x:Bind OptionId, Mode=OneWay}">
+                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    </Button>
+                </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+    </StackPanel>
+</ContentDialog>

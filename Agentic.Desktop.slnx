@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Agentic.ACPLibrary/Agentic.ACPLibrary.csproj" />
+  <Project Path="Agentic.Desktop/Agentic.Desktop.csproj">
+    <Platform Project="x86" />
+  </Project>
+</Solution>
