@@ -160,6 +160,9 @@ public partial class ChatViewModel : ObservableObject
                     if (!_flushScheduled)
                     {
                         _flushScheduled = true;
+                        // Capture the target message now: fast agents may complete the prompt
+                        // (which nulls CurrentAgentMessage) before the delayed flush runs
+                        var target = CurrentAgentMessage;
                         // Batch flush after 50ms
                         _ = Task.Delay(50).ContinueWith(_ =>
                         {
@@ -170,8 +173,9 @@ public partial class ChatViewModel : ObservableObject
                                 _flushScheduled = false;
                                 _dispatcherQueue.TryEnqueue(() =>
                                 {
-                                    if (CurrentAgentMessage is not null)
-                                        CurrentAgentMessage.TextContent += batchText;
+                                    var msg = target ?? CurrentAgentMessage;
+                                    if (msg is not null)
+                                        msg.TextContent += batchText;
                                 });
                             }
                         });

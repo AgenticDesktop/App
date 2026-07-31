@@ -56,7 +56,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.5.0" />
-    <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.1.0-beta.3" />
+    <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.1.0-nightly.1ad856d0d1c865d194a161c6481986a2260b4c50" />
   </ItemGroup>
 
   <!--
