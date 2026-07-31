@@ -1,0 +1,1 @@
+WinUI 3 (Microsoft.UI.Xaml), .NET MAUI-style project structure with `.csproj`, Microsoft.Extensions.Logging for diagnostics, WinRT interop via `WinRT.Interop` for native HWND access, and resource files (`.resw`) for multi-language localization.

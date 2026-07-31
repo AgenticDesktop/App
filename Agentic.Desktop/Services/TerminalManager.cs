@@ -6,7 +6,7 @@ using Agentic.ACPLibrary.Client;
 namespace Agentic.Desktop.Services;
 
 /// <summary>
-/// ITerminalHandler 的 UI 实现。管理多个终端进程实例。
+/// UI implementation of ITerminalHandler. Manages multiple terminal process instances.
 /// </summary>
 public class TerminalManager : ITerminalHandler, IDisposable
 {
@@ -35,7 +35,7 @@ public class TerminalManager : ITerminalHandler, IDisposable
         var instance = new TerminalInstance(process);
         process.Start();
 
-        // 异步读取标准输出到缓冲区
+        // Asynchronously read stdout into buffer
         _ = Task.Run(async () =>
         {
             try
@@ -49,14 +49,14 @@ public class TerminalManager : ITerminalHandler, IDisposable
             catch (Exception) { }
         }, ct);
 
-        // 异步读取标准错误到缓冲区
+        // Asynchronously read stderr into buffer
         _ = Task.Run(async () =>
         {
             try
             {
                 while (await process.StandardError.ReadLineAsync(ct) is { } line)
                 {
-                    instance.AppendOutput("[stderr] " + line + "\n");
+                    instance.AppendOutput(LocalizationService.Get("StderrPrefix") + line + "\n");
                 }
             }
             catch (OperationCanceledException) { }

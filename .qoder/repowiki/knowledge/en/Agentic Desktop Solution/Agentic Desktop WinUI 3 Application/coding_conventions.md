@@ -1,0 +1,5 @@
+- Cross-page shared state is exposed as static properties on `App` (e.g. `CurrentAcpClient`, `Window`, `DispatcherQueue`) with change notifications via static events like `AcpClientChanged`.
+- UI thread marshalling uses `App.DispatcherQueue.TryEnqueue(...)` instead of `Dispatcher.Invoke` or background threads.
+- XAML views bind to public properties on their code-behind ViewModel instances created in the page constructor, not via dependency injection.
+- Localization strings are accessed through `LocalizationService.Get(key)` rather than direct resource lookups.
+- Navigation between pages is performed through a central `RootFrame` inside `MainWindow` keyed by string tags on `NavigationViewItem` elements.

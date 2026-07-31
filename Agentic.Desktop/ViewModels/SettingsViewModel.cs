@@ -14,7 +14,7 @@ namespace Agentic.Desktop.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
-    /// <summary>全局共享实例：页面每次导航都会重建，连接状态必须跨页面实例保持</summary>
+    /// <summary>Globally shared instance: pages are recreated on each navigation, connection state must persist across page instances.</summary>
     public static SettingsViewModel Shared { get; } = new();
 
     [ObservableProperty]
@@ -27,7 +27,7 @@ public partial class SettingsViewModel : ObservableObject
     private string _workingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
     [ObservableProperty]
-    private string _connectionStatus = "未连接";
+    private string _connectionStatus = LocalizationService.Get("StatusNotConnected");
 
     [ObservableProperty]
     private string _agentName = string.Empty;
@@ -41,7 +41,7 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private bool _isConnected;
 
-    /// <summary>连接状态枚举: 0=Disconnected, 1=Connecting, 2=Connected</summary>
+    /// <summary>Connection state enum: 0=Disconnected, 1=Connecting, 2=Connected</summary>
     [ObservableProperty]
     private int _connectionState;
 
@@ -51,10 +51,10 @@ public partial class SettingsViewModel : ObservableObject
 
     private Func<int, Task>? _agentProcessExitedHandler;
 
-    /// <summary>连接成功后通知外部（MainPage）传递 AcpClient</summary>
+    /// <summary>Notifies external consumers (MainPage) after successful connection, passing the AcpClient.</summary>
     public Action<IAcpClient>? OnAgentConnected { get; set; }
 
-    /// <summary>Agent 进程意外断开时触发</summary>
+    /// <summary>Raised when the Agent process disconnects unexpectedly.</summary>
     public Action<string>? OnAgentDisconnected { get; set; }
 
     [RelayCommand]
@@ -63,18 +63,18 @@ public partial class SettingsViewModel : ObservableObject
         if (IsConnecting) return;
         IsConnecting = true;
         ConnectionState = 1; // Connecting
-        ConnectionStatus = "连接中...";
+        ConnectionStatus = LocalizationService.Get("StatusConnectingProgress");
 
         try
         {
-            // 如果已有连接，先断开
+            // Disconnect existing connection first
             await CleanupAsync();
 
             IAgentTransport transport;
 
             if (string.IsNullOrWhiteSpace(AgentPath))
             {
-                // 使用 Mock 传输
+                // Use Mock transport
                 transport = new MockAgentTransport();
             }
             else
@@ -86,10 +86,10 @@ public partial class SettingsViewModel : ObservableObject
             var logger = App.LoggerFactory?.CreateLogger<AcpClient>();
             AcpClient = new AcpClient(transport, dispatcher, logger);
 
-            // 订阅 Agent 进程退出事件
+            // Subscribe to Agent process exit event
             _agentProcessExitedHandler = exitCode =>
             {
-                OnAgentDisconnected?.Invoke($"Agent 已断开 (exit code: {exitCode})");
+                OnAgentDisconnected?.Invoke(LocalizationService.Format("StatusAgentDisconnected", exitCode));
                 return Task.CompletedTask;
             };
             AcpClient.AgentProcessExited += _agentProcessExitedHandler;
@@ -97,24 +97,24 @@ public partial class SettingsViewModel : ObservableObject
             var info = await AcpClient.InitializeAsync();
             AgentName = info.AgentInfo?.Title ?? info.AgentInfo?.Name ?? "Unknown Agent";
 
-            // 创建 TerminalManager
+            // Create TerminalManager
             _terminalManager = new TerminalManager();
             AcpClient.TerminalHandler = _terminalManager;
 
-            // 创建会话
+            // Create session
             var sid = await AcpClient.CreateSessionAsync(WorkingDirectory);
             SessionId = sid;
 
-            ConnectionStatus = "已连接";
+            ConnectionStatus = LocalizationService.Get("StatusConnectedConfirm");
             IsConnected = true;
             ConnectionState = 2; // Connected
 
-            // 通知 ChatViewModel 使用新的 AcpClient
+            // Notify ChatViewModel to use the new AcpClient
             OnAgentConnected?.Invoke(AcpClient);
         }
         catch (Exception ex)
         {
-            ConnectionStatus = $"连接失败: {ex.Message}";
+            ConnectionStatus = LocalizationService.Format("StatusConnectionFailed", ex.Message);
             AgentName = string.Empty;
             SessionId = string.Empty;
             ConnectionState = 0; // Disconnected
@@ -129,13 +129,13 @@ public partial class SettingsViewModel : ObservableObject
     private async Task DisconnectAsync()
     {
         await CleanupAsync();
-        ConnectionStatus = "未连接";
+        ConnectionStatus = LocalizationService.Get("StatusNotConnected");
         AgentName = string.Empty;
         SessionId = string.Empty;
         IsConnected = false;
         ConnectionState = 0; // Disconnected
 
-        // 同步全局状态，通知 ChatViewModel 等订阅者
+        // Sync global state, notify ChatViewModel and other subscribers
         App.SetAcpClient(null);
     }
 

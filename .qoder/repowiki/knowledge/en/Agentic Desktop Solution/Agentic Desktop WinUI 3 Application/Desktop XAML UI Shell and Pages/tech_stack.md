@@ -1,0 +1,1 @@
+WinUI 3 / Microsoft.UI.Xaml with Windows App SDK, using `XamlControlsResources` merged dictionary for Fluent Design components (NavigationView, TitleBar, SplitView, ItemsRepeater). XAML `x:Bind` compiled bindings are used throughout for performance, and `AutomationProperties.AutomationId` attributes mark elements for accessibility testing.

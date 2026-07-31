@@ -1,0 +1,11 @@
+schema_version: 1
+module_path: desktop_app/views_ui
+title: Desktop XAML UI Shell and Pages
+scope:
+    - Agentic.Desktop/App.xaml
+    - Agentic.Desktop/MainPage.xaml
+    - Agentic.Desktop/MainWindow.xaml
+    - Agentic.Desktop/SettingsPage.xaml
+source_files: []
+depends_on: []
+related_to: []

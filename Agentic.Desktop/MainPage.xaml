@@ -35,7 +35,7 @@
                     <StackPanel Spacing="4">
                         <TextBlock Text="{x:Bind TextContent, Mode=OneWay}"
                                    TextWrapping="Wrap" />
-                        <TextBlock Text="typing..."
+                        <TextBlock x:Uid="TypingIndicator"
                                    Visibility="{x:Bind IsStreaming, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
                                    Opacity="0.5" FontSize="12"
                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
@@ -79,7 +79,7 @@
                         Margin="8,8,0,0"
                         Background="Transparent" BorderThickness="0"
                         Click="ToggleSidebar_Click"
-                        ToolTipService.ToolTip="Toggle chats list"
+                        x:Uid="ToggleSidebarButton"
                         Canvas.ZIndex="100">
                     <FontIcon Glyph="&#xE700;" FontSize="16" />
                 </Button>
@@ -89,7 +89,7 @@
                               VerticalScrollBarVisibility="Auto"
                               Padding="8,12">
                     <Grid>
-                        <!-- 未连接时的提示 -->
+                        <!-- Hint when not connected -->
                         <StackPanel x:Name="ConnectHintPanel"
                                     VerticalAlignment="Center" HorizontalAlignment="Center"
                                     Spacing="12" Margin="40"
@@ -97,11 +97,11 @@
                             <FontIcon Glyph="&#xE77B;" FontSize="48"
                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                       HorizontalAlignment="Center" />
-                            <TextBlock Text="请先在设置中连接 Agent"
+                            <TextBlock x:Uid="ConnectHint"
                                        FontSize="16"
                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                        HorizontalAlignment="Center" />
-                            <HyperlinkButton Content="打开设置"
+                            <HyperlinkButton x:Uid="OpenSettingsButton"
                                              HorizontalAlignment="Center"
                                              Click="OpenSettings_Click" />
                         </StackPanel>
@@ -126,10 +126,10 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox x:Name="InputTextBox"
+                                 x:Uid="InputTextBox"
                                  Grid.Column="0"
                                  AutomationProperties.AutomationId="ChatInputTextBox"
                                  Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 PlaceholderText="输入消息..."
                                  AcceptsReturn="False"
                                  IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
                                  KeyDown="InputTextBox_KeyDown"
@@ -137,20 +137,20 @@
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
                             <Button x:Name="SendButton"
+                                    x:Uid="SendButton"
                                     AutomationProperties.AutomationId="SendButton"
                                     Command="{x:Bind ViewModel.SendMessageCommand}"
                                     Style="{StaticResource AccentButtonStyle}"
                                     IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
-                                    VerticalAlignment="Center"
-                                    ToolTipService.ToolTip="发送消息">
+                                    VerticalAlignment="Center">
                                 <FontIcon Glyph="&#xE724;" FontSize="16" />
                             </Button>
                             <Button x:Name="CancelButton"
+                                    x:Uid="CancelButton"
                                     AutomationProperties.AutomationId="CancelButton"
                                     Command="{x:Bind ViewModel.CancelGenerationCommand}"
                                     Visibility="{x:Bind ViewModel.IsAgentResponding, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                                    VerticalAlignment="Center"
-                                    ToolTipService.ToolTip="取消生成">
+                                    VerticalAlignment="Center">
                                 <FontIcon Glyph="&#xE711;" FontSize="16" />
                             </Button>
                         </StackPanel>

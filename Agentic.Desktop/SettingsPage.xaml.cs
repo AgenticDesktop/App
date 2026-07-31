@@ -9,17 +9,17 @@ namespace Agentic_Desktop;
 
 public sealed partial class SettingsPage : Page
 {
-    // 使用全局共享 ViewModel：Frame.Navigate 每次重建页面，连接状态不能随页面丢失
+    // Use global shared ViewModel: Frame.Navigate recreates the page each time, connection state must not be lost with the page
     public SettingsViewModel ViewModel { get; } = SettingsViewModel.Shared;
 
     public SettingsPage()
     {
         InitializeComponent();
 
-        // 连接成功后将 AcpClient 存储到 App 并通知 ChatViewModel
+        // After connection, store AcpClient in App and notify ChatViewModel
         ViewModel.OnAgentConnected = client =>
         {
-            // 创建权限处理器并订阅事件
+            // Create permission handler and subscribe to events
             var permHandler = new DesktopPermissionHandler(App.DispatcherQueue);
             permHandler.PermissionRequested += async args =>
             {
@@ -33,16 +33,16 @@ public sealed partial class SettingsPage : Page
             };
             client.PermissionHandler = permHandler;
 
-            // 创建文件系统处理器
+            // Create file system handler
             client.FileSystemHandler = new DesktopFileSystemHandler(ViewModel.WorkingDirectory);
 
-            // 更新标题栏连接状态
+            // Update title bar connection status
             UpdateConnectionStatus();
 
             App.SetAcpClient(client);
         };
 
-        // Agent 断开时更新 UI
+        // Update UI when Agent disconnects
         ViewModel.OnAgentDisconnected = message =>
         {
             App.DispatcherQueue.TryEnqueue(() =>
@@ -53,7 +53,7 @@ public sealed partial class SettingsPage : Page
                 App.SetAcpClient(null);
             });
         };
-        // 监听连接状态变化（共享 VM 生命周期长于页面，卸载时退订避免重复订阅）
+        // Listen for connection state changes (shared VM outlives the page; unsubscribe on unload to avoid duplicate subscriptions)
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         Unloaded += (_, _) => ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
     }

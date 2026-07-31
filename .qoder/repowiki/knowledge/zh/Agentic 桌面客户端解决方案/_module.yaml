@@ -1,0 +1,14 @@
+schema_version: 1
+module_path: ""
+title: Agentic 桌面客户端解决方案
+scope:
+    - README.md
+    - README.en.md
+    - .gitignore
+    - Agentic.Desktop.slnx
+    - Directory.Build.props
+    - global.json
+    - LICENSE
+source_files: []
+depends_on: []
+related_to: []

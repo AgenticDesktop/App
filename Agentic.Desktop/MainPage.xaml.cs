@@ -17,19 +17,19 @@ public sealed partial class MainPage : Page
     {
         InitializeComponent();
 
-        // 绑定 ChatList 到侧边栏
+        // Bind ChatList to sidebar
         ChatListPanel.ViewModel = ViewModel.ChatList;
 
-        // 订阅滚动事件
+        // Subscribe to scroll event
         ViewModel.ScrollToBottom += ScrollToBottom;
 
-        // 如果已有连接的 AcpClient，立即绑定
+        // If a connected AcpClient already exists, bind immediately
         if (App.CurrentAcpClient is not null)
         {
             ViewModel.BindClient(App.CurrentAcpClient);
         }
 
-        // 订阅未来的连接变更
+        // Subscribe to future connection changes
         App.AcpClientChanged += OnAcpClientChanged;
     }
 
@@ -41,7 +41,7 @@ public sealed partial class MainPage : Page
         }
         else
         {
-            // 断开连接时清除消息
+            // Clear messages on disconnect
             ViewModel.ClearMessages();
         }
     }

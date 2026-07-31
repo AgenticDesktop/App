@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Agentic.Desktop.Services;
 
 namespace Agentic.Desktop.ViewModels.Messages;
 
@@ -11,7 +12,7 @@ public partial class ChatSession : ObservableObject
     public string Id { get; } = Guid.NewGuid().ToString("N");
 
     [ObservableProperty]
-    private string _title = "New Chat";
+    private string _title = LocalizationService.Get("NewChatTitle");
 
     [ObservableProperty]
     private DateTime _createdAt = DateTime.Now;

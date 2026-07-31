@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Global / Navigation (MainWindow.xaml) -->
+  <data name="NavChat.Content" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="NavSettings.Content" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="StatusText.Text" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+
+  <!-- C# Code Strings (MainWindow.xaml.cs) - bare keys kept for LocalizationService.Get() -->
+  <data name="StatusDisconnected" xml:space="preserve">
+    <value>Disconnected</value>
+  </data>
+  <data name="StatusConnecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="StatusConnected" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+
+  <!-- Chat Page (MainPage.xaml) -->
+  <data name="TypingIndicator.Text" xml:space="preserve">
+    <value>typing...</value>
+  </data>
+  <data name="ToggleSidebarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Toggle chats list</value>
+  </data>
+  <data name="ConnectHint.Text" xml:space="preserve">
+    <value>Please connect an Agent in Settings first</value>
+  </data>
+  <data name="OpenSettingsButton.Content" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
+  <data name="InputTextBox.PlaceholderText" xml:space="preserve">
+    <value>Type a message...</value>
+  </data>
+  <data name="SendButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Send message</value>
+  </data>
+  <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Cancel generation</value>
+  </data>
+
+  <!-- Settings Page (SettingsPage.xaml) -->
+  <data name="SettingsAgentConfig.Text" xml:space="preserve">
+    <value>Agent Configuration</value>
+  </data>
+  <data name="SettingsAgentPathLabel.Text" xml:space="preserve">
+    <value>Agent Path</value>
+  </data>
+  <data name="SettingsAgentPathTextBox.PlaceholderText" xml:space="preserve">
+    <value>Leave empty for Mock Agent, or enter agent executable path</value>
+  </data>
+  <data name="SettingsAgentPathHint.Text" xml:space="preserve">
+    <value>Leave empty to use built-in Mock Agent for demo</value>
+  </data>
+  <data name="SettingsAgentArgsLabel.Text" xml:space="preserve">
+    <value>Agent Arguments</value>
+  </data>
+  <data name="SettingsAgentArgsTextBox.PlaceholderText" xml:space="preserve">
+    <value>Optional, e.g.: run --project path/to/project</value>
+  </data>
+  <data name="SettingsAgentArgsHint.Text" xml:space="preserve">
+    <value>Arguments passed to the command when starting the Agent</value>
+  </data>
+  <data name="SettingsWorkDirLabel.Text" xml:space="preserve">
+    <value>Working Directory</value>
+  </data>
+  <data name="SettingsWorkDirTextBox.PlaceholderText" xml:space="preserve">
+    <value>Agent's working directory</value>
+  </data>
+  <data name="SettingsBrowseButton.Content" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="SettingsConnectButton.Content" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="SettingsDisconnectButton.Content" xml:space="preserve">
+    <value>Disconnect</value>
+  </data>
+  <data name="SettingsConnectionStatus.Text" xml:space="preserve">
+    <value>Connection Status</value>
+  </data>
+
+  <!-- Chat List (ChatListPanel.xaml) -->
+  <data name="ChatListTitle.Text" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="NewChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>New chat</value>
+  </data>
+  <data name="DeleteChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Delete chat</value>
+  </data>
+
+  <!-- Permission Dialog (PermissionDialog.xaml) -->
+  <data name="PermissionDialog.Title" xml:space="preserve">
+    <value>Permission Request</value>
+  </data>
+  <data name="PermissionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Allow</value>
+  </data>
+  <data name="PermissionDialog.CloseButtonText" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="PermissionDescription.Text" xml:space="preserve">
+    <value>The agent wants to perform the following action:</value>
+  </data>
+  <data name="UnknownAction" xml:space="preserve">
+    <value>Unknown action</value>
+  </data>
+
+  <!-- C# Code Strings (SettingsViewModel.cs) -->
+  <data name="StatusNotConnected" xml:space="preserve">
+    <value>Not connected</value>
+  </data>
+  <data name="StatusConnectingProgress" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="StatusConnectedConfirm" xml:space="preserve">
+    <value>Connected</value>
+  </data>
+  <data name="StatusAgentDisconnected" xml:space="preserve">
+    <value>Agent disconnected (exit code: {0})</value>
+  </data>
+  <data name="StatusConnectionFailed" xml:space="preserve">
+    <value>Connection failed: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (ChatViewModel.cs + ChatSession.cs) -->
+  <data name="NewChatTitle" xml:space="preserve">
+    <value>New Chat</value>
+  </data>
+  <data name="ErrorPrefix" xml:space="preserve">
+    <value>&#10;[Error: {0}]</value>
+  </data>
+  <data name="ToolCallPrefix" xml:space="preserve">
+    <value>[Tool: {0}]</value>
+  </data>
+  <data name="MockResponse1" xml:space="preserve">
+    <value>I received your message: </value>
+  </data>
+  <data name="MockResponse2" xml:space="preserve">
+    <value>I'm a mock agent running in the UI. </value>
+  </data>
+  <data name="MockResponse3" xml:space="preserve">
+    <value>Connect a real ACP agent in Settings to get actual responses.</value>
+  </data>
+
+  <!-- C# Code Strings (FileSystemHandler.cs) -->
+  <data name="AccessDeniedMessage" xml:space="preserve">
+    <value>Access denied: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (TerminalManager.cs) -->
+  <data name="StderrPrefix" xml:space="preserve">
+    <value>[stderr] </value>
+  </data>
+</root>

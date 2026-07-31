@@ -1,0 +1,48 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: en-US
+branch: main
+nodes_managed: true
+exported_at: "2026-07-31T06:38:47Z"
+modules:
+    "":
+        dir_name: Agentic Desktop Solution
+        title: Agentic Desktop Solution
+        scope:
+            - README.md
+            - README.en.md
+            - README.ja.md
+            - README.zh-TW.md
+            - .gitignore
+            - global.json
+            - Directory.Build.props
+            - Agentic.Desktop.slnx
+            - validate_resw.ps1
+            - LICENSE
+        source_files: []
+        children:
+            - desktop_app
+        depends_on: []
+        related_to: []
+    desktop_app:
+        dir_name: Agentic Desktop WinUI 3 Application
+        title: Agentic Desktop WinUI 3 Application
+        scope:
+            - Agentic.Desktop/
+        source_files: []
+        children:
+            - desktop_app/views_ui
+        depends_on: []
+        related_to: []
+    desktop_app/views_ui:
+        dir_name: Desktop XAML UI Shell and Pages
+        title: Desktop XAML UI Shell and Pages
+        scope:
+            - Agentic.Desktop/App.xaml
+            - Agentic.Desktop/MainPage.xaml
+            - Agentic.Desktop/MainWindow.xaml
+            - Agentic.Desktop/SettingsPage.xaml
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

@@ -33,7 +33,7 @@
                              Fill="Gray"
                              AutomationProperties.AutomationId="ConnectionStatusDot" />
                     <TextBlock x:Name="StatusText"
-                               Text="Disconnected"
+                               x:Uid="StatusText"
                                FontSize="12"
                                VerticalAlignment="Center"
                                AutomationProperties.AutomationId="ConnectionStatusText" />
@@ -49,14 +49,14 @@
                         SelectionChanged="RootNavView_SelectionChanged"
                         Loaded="RootNavView_Loaded">
             <NavigationView.MenuItems>
-                <NavigationViewItem Content="聊天" AutomationProperties.AutomationId="ChatNavItem" Tag="chat">
+                <NavigationViewItem x:Uid="NavChat" AutomationProperties.AutomationId="ChatNavItem" Tag="chat">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8BD;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem Content="设置" AutomationProperties.AutomationId="SettingsNavItem" Tag="settings">
+                <NavigationViewItem x:Uid="NavSettings" AutomationProperties.AutomationId="SettingsNavItem" Tag="settings">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE713;" />
                     </NavigationViewItem.Icon>

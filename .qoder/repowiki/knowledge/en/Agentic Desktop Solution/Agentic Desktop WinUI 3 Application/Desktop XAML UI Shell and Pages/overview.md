@@ -1,0 +1,1 @@
+WinUI 3 desktop application shell providing the main window, chat conversation page with sidebar, and settings page that manage agent connection and messaging through MVVM-bound XAML views.

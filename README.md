@@ -1,78 +1,80 @@
-# Agentic.Desktop
+# Agentic Desktop
 
-一个基于 WinUI 3 的 ACP（Agent Communication Protocol）桌面客户端，提供与 AI Agent 交互的聊天界面。
+English | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
-## 功能特性
+A WinUI 3-based ACP (Agent Communication Protocol) desktop client that provides a chat interface for interacting with AI Agents.
 
-- **聊天界面** — 与 ACP Agent 进行实时流式对话，支持 Markdown 渲染
-- **Agent 连接管理** — 通过 stdio 传输层连接任意 ACP 兼容的 Agent 可执行文件
-- **内置 Mock Agent** — 无需真实 Agent 即可体验完整 UI 流程
-- **权限管理** — Agent 请求文件/终端权限时弹出交互式确认对话框
-- **终端管理** — 支持 Agent 发起的终端命令执行
-- **Fluent Design** — Mica 背景、亚克力材质、自适应主题
+## Features
 
-## 技术栈
+- **Chat Interface** — Real-time streaming conversation with ACP Agents, with Markdown rendering support
+- **Agent Connection Management** — Connect to any ACP-compatible Agent executable via stdio transport layer
+- **Built-in Mock Agent** — Experience the full UI workflow without a real Agent
+- **Permission Management** — Interactive confirmation dialog when Agents request file/terminal permissions
+- **Terminal Management** — Support for terminal command execution initiated by Agents
+- **Fluent Design** — Mica background, acrylic material, adaptive theme
 
-| 组件 | 版本 |
-|------|------|
+## Tech Stack
+
+| Component | Version |
+| ----------- | --------- |
 | .NET | 10.0 |
 | Windows App SDK | 2.3.1 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
 | ShihaoShen.Agentic.ACPLibrary  | 0.1.0-beta.3 |
 
-## 系统要求
+## System Requirements
 
-- Windows 10 1809 (Build 17763) 及以上
+- Windows 10 1809 (Build 17763) or later
 - [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [WinApp CLI](https://learn.microsoft.com/windows/apps/windows-app-sdk/) (`dotnet tool install -g winapp`)
-- 开启 **开发者模式**（设置 > 系统 > 开发者选项）
+- **Developer Mode** enabled (Settings > System > Developer Options)
 
-## 快速开始
+## Quick Start
 
 ```powershell
-# 克隆仓库
+# Clone the repository
 git clone https://github.com/AgenticDesktop/App.git
 cd App
 dotnet build -p:Platform=x64
 winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 ```
 
-## 使用说明
+## Usage
 
-1. 启动应用后进入 **设置** 页面
-2. 配置 Agent：
-   - **Agent 路径** — 填写 ACP Agent 可执行文件路径（留空使用内置 Mock Agent）
-   - **Agent 参数** — 可选的启动参数
-   - **工作目录** — Agent 的工作目录
-3. 点击 **连接**，等待状态变为"已连接"
-4. 切换到 **聊天** 页面开始对话
+1. After launching the app, go to the **Settings** page
+2. Configure the Agent:
+   - **Agent Path** — Enter the path to the ACP Agent executable (leave empty to use the built-in Mock Agent)
+   - **Agent Arguments** — Optional startup arguments
+   - **Working Directory** — The working directory for the Agent
+3. Click **Connect** and wait for the status to change to "Connected"
+4. Switch to the **Chat** page to start a conversation
 
-## 项目结构
+## Project Structure
 
 ```
 App/
-├── ViewModels/          # MVVM 视图模型
-│   ├── ChatViewModel.cs         # 聊天逻辑、流式消息处理
-│   ├── SettingsViewModel.cs     # Agent 连接管理
-│   └── Messages/ChatMessage.cs  # 消息模型
-├── Views/               # 对话框
-│   └── PermissionDialog.xaml    # 权限确认对话框
-├── Services/            # 基础服务
-│   ├── FileSystemHandler.cs     # 文件系统权限处理
-│   ├── PermissionHandler.cs     # 权限请求 UI 调度
-│   ├── TerminalManager.cs       # 终端会话管理
-│   └── MarkdownHelper.cs        # Markdown 渲染
-├── Converters/          # XAML 值转换器
-├── Mocks/               # Mock Agent 传输层
-├── MainPage.xaml        # 聊天页面
-├── SettingsPage.xaml    # 设置页面
-└── MainWindow.xaml      # 主窗口（导航框架）
+├── ViewModels/          # MVVM view models
+│   ├── ChatViewModel.cs         # Chat logic, streaming message handling
+│   ├── SettingsViewModel.cs     # Agent connection management
+│   └── Messages/ChatMessage.cs  # Message model
+├── Views/               # Dialogs
+│   └── PermissionDialog.xaml    # Permission confirmation dialog
+├── Services/            # Core services
+│   ├── FileSystemHandler.cs     # File system permission handling
+│   ├── PermissionHandler.cs     # Permission request UI dispatching
+│   ├── TerminalManager.cs       # Terminal session management
+│   └── MarkdownHelper.cs        # Markdown rendering
+├── Converters/          # XAML value converters
+├── Mocks/               # Mock Agent transport layer
+├── MainPage.xaml        # Chat page
+├── SettingsPage.xaml    # Settings page
+└── MainWindow.xaml      # Main window (navigation framework)
 ```
 
-## 架构
+## Architecture
 
-应用采用 MVVM 架构，通过 `IAcpClient` 接口与 Agent 通信：
+The application uses the MVVM architecture and communicates with Agents through the `IAcpClient` interface:
 
 ```
 ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
@@ -86,6 +88,6 @@ App/
                                              └─────────────────┘
 ```
 
-## 许可证
+## License
 
 [MIT](LICENSE) © 2026 Shihao Shen

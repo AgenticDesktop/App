@@ -1,0 +1,1 @@
+Open Agentic.Desktop.slnx in Visual Studio or run `dotnet build` / `dotnet run` from the repository root; the solution targets x86 for the desktop project.

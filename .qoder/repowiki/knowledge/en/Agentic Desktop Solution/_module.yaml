@@ -1,0 +1,17 @@
+schema_version: 1
+module_path: ""
+title: Agentic Desktop Solution
+scope:
+    - README.md
+    - README.en.md
+    - README.ja.md
+    - README.zh-TW.md
+    - .gitignore
+    - global.json
+    - Directory.Build.props
+    - Agentic.Desktop.slnx
+    - validate_resw.ps1
+    - LICENSE
+source_files: []
+depends_on: []
+related_to: []

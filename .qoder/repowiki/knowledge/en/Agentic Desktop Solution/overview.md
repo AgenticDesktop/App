@@ -1,0 +1,1 @@
+.NET solution that composes the Agentic.ACPLibrary shared library with the Agentic.Desktop WinUI 3 application, enforcing a common C# language and build configuration across both projects.

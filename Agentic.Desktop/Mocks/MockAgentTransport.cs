@@ -4,7 +4,7 @@ using Agentic.ACPLibrary.Transport;
 namespace Agentic.Desktop.Mocks;
 
 /// <summary>
-/// Mock 实现 <see cref="IAgentTransport"/>，提供脚本化的 ACP 响应用于 UI 开发。
+/// Mock implementation of <see cref="IAgentTransport"/> providing scripted ACP responses for UI development.
 /// </summary>
 public sealed class MockAgentTransport : IAgentTransport
 {

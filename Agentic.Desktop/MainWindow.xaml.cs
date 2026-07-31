@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using System.Linq;
+using Agentic.Desktop.Services;
 
 namespace Agentic_Desktop;
 
@@ -21,11 +22,11 @@ public sealed partial class MainWindow : Window
 
         AppWindow.SetIcon("Assets/AppIcon.ico");
 
-        // 设置合适的窗口大小
+        // Set appropriate window size
         AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 780));
     }
 
-    /// <summary>更新连接状态指示器</summary>
+    /// <summary>Updates the connection status indicator.</summary>
     public void UpdateConnectionStatus(int state, string? agentName = null)
     {
         DispatcherQueue.TryEnqueue(() =>
@@ -34,15 +35,15 @@ public sealed partial class MainWindow : Window
             {
                 case 0: // Disconnected
                     StatusDot.Fill = new SolidColorBrush(Colors.Gray);
-                    StatusText.Text = "Disconnected";
+                    StatusText.Text = LocalizationService.Get("StatusDisconnected");
                     break;
                 case 1: // Connecting
                     StatusDot.Fill = new SolidColorBrush(Colors.Gold);
-                    StatusText.Text = "Connecting...";
+                    StatusText.Text = LocalizationService.Get("StatusConnecting");
                     break;
                 case 2: // Connected
                     StatusDot.Fill = new SolidColorBrush(Colors.LimeGreen);
-                    StatusText.Text = agentName ?? "Connected";
+                    StatusText.Text = agentName ?? LocalizationService.Get("StatusConnected");
                     break;
             }
         });
@@ -85,7 +86,7 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    /// <summary>导航到设置页面</summary>
+    /// <summary>Navigates to the settings page.</summary>
     public void NavigateToSettings()
     {
         RootNavView.SelectedItem = RootNavView.FooterMenuItems

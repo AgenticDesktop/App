@@ -1,0 +1,1 @@
+No build or setup scripts are present in this scope; the project is a standard WinUI 3 .NET desktop app where `App.xaml.cs` (not in scope) likely wires the `MainWindow` as the startup window via the default MSBuild targets.

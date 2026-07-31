@@ -1,0 +1,5 @@
+- XAML views bind exclusively to a strongly-typed `ViewModel` property exposed by the code-behind, using `x:Bind` with explicit `Mode=OneWay` or `Mode=TwoWay` and `UpdateSourceTrigger=PropertyChanged` for input fields.
+- User-facing strings are externalized via `x:Uid` attributes (e.g., `x:Uid="StatusText"`, `x:Uid="NavChat"`) rather than inline text, enabling resource localization.
+- Every interactive control includes an `AutomationProperties.AutomationId` attribute for accessibility and automated UI testing.
+- Boolean-to-visibility conversions go through the shared `BoolToVisibilityConverter` registered in each page's `Page.Resources`, never hardcoded `Collapsed`/`Visible` values.
+- Theme resources are consumed via `{ThemeResource ...}` markup extensions (e.g., `ApplicationPageBackgroundThemeBrush`, `CardBackgroundFillColorDefaultBrush`) instead of hard-coded colors.

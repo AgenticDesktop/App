@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Agentic.ACPLibrary.Client;
 using Agentic.ACPLibrary.Models;
+using Agentic.Desktop.Services;
 using Agentic.Desktop.ViewModels.Messages;
 
 namespace Agentic.Desktop.ViewModels;
@@ -32,7 +33,7 @@ public partial class ChatViewModel : ObservableObject
 
     public event Action? ScrollToBottom;
 
-    // 帧级合并相关
+    // Frame-level merging
     private readonly object _lock = new();
     private string _pendingText = "";
     private bool _flushScheduled;
@@ -70,7 +71,7 @@ public partial class ChatViewModel : ObservableObject
         ScrollToBottom?.Invoke();
     }
 
-    /// <summary>绑定 AcpClient（从 Settings 连接后调用）</summary>
+    /// <summary>Binds an AcpClient (called after connection from Settings).</summary>
     public void BindClient(IAcpClient client)
     {
         if (_acpClient is not null)
@@ -83,7 +84,7 @@ public partial class ChatViewModel : ObservableObject
         IsAgentConnected = true;
     }
 
-    /// <summary>清除当前会话的消息（断开连接时调用）</summary>
+    /// <summary>Clears messages for the current session (called on disconnect).</summary>
     public void ClearMessages()
     {
         Messages.Clear();
@@ -99,19 +100,19 @@ public partial class ChatViewModel : ObservableObject
         var text = InputText;
         InputText = "";
 
-        // 添加用户消息
+        // Add user message
         Messages.Add(new ChatMessage(MessageRole.User, text));
 
-        // 更新 session 标题和预览
+        // Update session title and preview
         if (ChatList.SelectedSession is { } session)
         {
-            if (session.Title == "New Chat")
+            if (session.Title == LocalizationService.Get("NewChatTitle"))
                 session.Title = text.Length > 30 ? text[..30] + "..." : text;
             session.PreviewText = text.Length > 50 ? text[..50] + "..." : text;
             session.UpdatedAt = DateTime.Now;
         }
 
-        // 创建 Agent 消息占位
+        // Create Agent message placeholder
         var agentMsg = new ChatMessage(MessageRole.Agent) { IsStreaming = true };
         Messages.Add(agentMsg);
         CurrentAgentMessage = agentMsg;
@@ -121,13 +122,13 @@ public partial class ChatViewModel : ObservableObject
         {
             if (_acpClient is not null && _acpClient.CurrentSessionId is not null)
             {
-                // 真实 ACP 流程（或 Mock transport 通过 AcpClient）
+                // Real ACP flow (or Mock transport via AcpClient)
                 var prompt = new List<ContentBlock> { new TextContent { Text = text } };
                 await _acpClient.SendPromptAsync(_acpClient.CurrentSessionId, prompt);
             }
             else
             {
-                // 无 AcpClient 时的本地 Mock 模拟
+                // Local Mock simulation when no AcpClient is available
                 await SimulateMockResponseAsync(agentMsg, text);
             }
         }
@@ -137,7 +138,7 @@ public partial class ChatViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            agentMsg.TextContent += $"\n[Error: {ex.Message}]";
+            agentMsg.TextContent += LocalizationService.Format("ErrorPrefix", ex.Message);
         }
         finally
         {
@@ -149,7 +150,7 @@ public partial class ChatViewModel : ObservableObject
 
     private Task OnSessionUpdated(SessionUpdate update)
     {
-        // 帧级合并：累积文本，批量更新 UI
+        // Frame-level merging: accumulate text, batch update UI
         switch (update)
         {
             case AgentMessageChunk chunk when chunk.Content is TextContent tc:
@@ -159,7 +160,7 @@ public partial class ChatViewModel : ObservableObject
                     if (!_flushScheduled)
                     {
                         _flushScheduled = true;
-                        // 50ms 后批量刷新
+                        // Batch flush after 50ms
                         _ = Task.Delay(50).ContinueWith(_ =>
                         {
                             lock (_lock)
@@ -185,14 +186,14 @@ public partial class ChatViewModel : ObservableObject
                     if (currentMessages is not null)
                     {
                         var toolMsg = new ChatMessage(MessageRole.System,
-                            $"[Tool: {toolCall.Title}]");
+                            LocalizationService.Format("ToolCallPrefix", toolCall.Title));
                         currentMessages.Add(toolMsg);
                     }
 
-                    // 更新 session 预览
+                    // Update session preview
                     if (ChatList.SelectedSession is { } session)
                     {
-                        session.PreviewText = $"[Tool: {toolCall.Title}]";
+                        session.PreviewText = LocalizationService.Format("ToolCallPrefix", toolCall.Title);
                         session.UpdatedAt = DateTime.Now;
                     }
                 });
@@ -214,15 +215,15 @@ public partial class ChatViewModel : ObservableObject
             CurrentAgentMessage.IsStreaming = false;
     }
 
-    /// <summary>Mock 模拟方法（用于无真实 agent 时的 UI 测试）</summary>
+    /// <summary>Mock simulation method (used for UI testing without a real agent).</summary>
     private async Task SimulateMockResponseAsync(ChatMessage agentMsg, string userText)
     {
         var responses = new[]
         {
-            "I received your message: ",
+            LocalizationService.Get("MockResponse1"),
             $"\"{userText}\". ",
-            "I'm a mock agent running in the UI. ",
-            "Connect a real ACP agent in Settings to get actual responses."
+            LocalizationService.Get("MockResponse2"),
+            LocalizationService.Get("MockResponse3")
         };
         foreach (var part in responses)
         {

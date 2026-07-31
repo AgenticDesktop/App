@@ -1,0 +1,8 @@
+schema_version: 1
+module_path: agentic_desktop
+title: Agentic 桌面客户端（WinUI 3）
+scope:
+    - Agentic.Desktop/
+source_files: []
+depends_on: []
+related_to: []

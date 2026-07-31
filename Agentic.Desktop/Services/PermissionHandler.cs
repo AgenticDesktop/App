@@ -5,16 +5,16 @@ using Microsoft.UI.Dispatching;
 namespace Agentic.Desktop.Services;
 
 /// <summary>
-/// IPermissionHandler 的 UI 实现。
-/// 当 Agent 请求权限时，通过事件通知 ViewModel 弹出对话框。
+/// UI implementation of IPermissionHandler.
+/// When the Agent requests permission, notifies the ViewModel via event to show a dialog.
 /// </summary>
 public class DesktopPermissionHandler : IPermissionHandler
 {
     private readonly DispatcherQueue _dispatcherQueue;
 
     /// <summary>
-    /// 当需要显示权限对话框时触发。
-    /// ViewModel 订阅此事件，弹出 ContentDialog，然后调用 complete 回调。
+    /// Raised when a permission dialog needs to be shown.
+    /// The ViewModel subscribes to this event, shows a ContentDialog, then invokes the complete callback.
     /// </summary>
     public event Func<PermissionRequestEventArgs, Task>? PermissionRequested;
 
@@ -34,7 +34,7 @@ public class DesktopPermissionHandler : IPermissionHandler
             OnComplete = response => tcs.TrySetResult(response)
         };
 
-        // 调度到 UI 线程触发对话框
+        // Dispatch to UI thread to trigger dialog
         _dispatcherQueue.TryEnqueue(() =>
         {
             _ = PermissionRequested?.Invoke(args);

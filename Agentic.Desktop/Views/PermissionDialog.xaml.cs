@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Agentic.ACPLibrary.Models;
+using Agentic.Desktop.Services;
 
 namespace Agentic.Desktop.Views;
 
@@ -16,15 +17,15 @@ public sealed partial class PermissionDialog : ContentDialog
         InitializeComponent();
         _request = request;
 
-        ToolTitle.Text = request.ToolCall?.Title ?? "Unknown action";
+        ToolTitle.Text = request.ToolCall?.Title ?? LocalizationService.Get("UnknownAction");
         ToolKind.Text = request.ToolCall?.Kind?.ToString() ?? "";
 
-        // 设置选项
+        // Set options
         OptionsRepeater.ItemsSource = request.Options;
 
         PrimaryButtonClick += (_, _) =>
         {
-            // 默认 primary = 第一个 allow 选项
+            // Default primary = first allow option
             var allowOption = request.Options.FirstOrDefault(o =>
                 o.Kind.Contains("allow", StringComparison.OrdinalIgnoreCase));
             if (allowOption is not null)

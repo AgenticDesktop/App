@@ -1,0 +1,1 @@
+Publish profiles under `Properties/PublishProfiles/` target win-arm64, win-x64, and win-x84; the app is launched as a UWP/WinUI 3 package via `Package.appxmanifest` and `app.manifest`.

@@ -3,9 +3,9 @@ using Markdig;
 namespace Agentic.Desktop.Services;
 
 /// <summary>
-/// Markdown 处理工具类。
-/// 当前 WinUI 3 的 TextBlock 不支持富文本/HTML 渲染，
-/// 后续可升级为 WebView2 渲染完整 Markdown。
+/// Markdown utility class.
+/// Current WinUI 3 TextBlock does not support rich text/HTML rendering;
+/// can be upgraded to WebView2 for full Markdown rendering in the future.
 /// </summary>
 public static class MarkdownHelper
 {
@@ -14,7 +14,7 @@ public static class MarkdownHelper
         .Build();
 
     /// <summary>
-    /// 将 Markdown 转换为 HTML（可用于 WebView2 渲染）。
+    /// Converts Markdown to HTML (can be used for WebView2 rendering).
     /// </summary>
     public static string ToHtml(string markdown)
     {
@@ -25,25 +25,25 @@ public static class MarkdownHelper
     }
 
     /// <summary>
-    /// 将 Markdown 转换为纯文本（去除格式标记）。
-    /// 当前作为临时方案，直到集成 WebView2 进行富文本渲染。
+    /// Converts Markdown to plain text (strips formatting markers).
+    /// This is a temporary solution until WebView2 is integrated for rich text rendering.
     /// </summary>
     public static string ToPlainText(string markdown)
     {
         if (string.IsNullOrWhiteSpace(markdown))
             return string.Empty;
 
-        // 简单去除常见 Markdown 格式标记
+        // Strip common Markdown formatting markers
         var text = markdown;
-        // 去除标题标记 (# ## ### 等)
+        // Remove heading markers (# ## ### etc.)
         text = System.Text.RegularExpressions.Regex.Replace(text, @"^#{1,6}\s+", "", System.Text.RegularExpressions.RegexOptions.Multiline);
-        // 去除粗体/斜体标记
+        // Remove bold/italic markers
         text = System.Text.RegularExpressions.Regex.Replace(text, @"\*{1,3}([^*]+)\*{1,3}", "$1");
-        // 去除代码块标记
+        // Remove code block markers
         text = System.Text.RegularExpressions.Regex.Replace(text, @"```\w*\n?", "");
-        // 去除行内代码标记
+        // Remove inline code markers
         text = System.Text.RegularExpressions.Regex.Replace(text, @"`([^`]+)`", "$1");
-        // 去除链接标记 [text](url)
+        // Remove link markers [text](url)
         text = System.Text.RegularExpressions.Regex.Replace(text, @"\[([^\]]+)\]\([^)]+\)", "$1");
 
         return text.Trim();

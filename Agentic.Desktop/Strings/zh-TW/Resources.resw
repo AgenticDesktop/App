@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Global / Navigation -->
+  <data name="NavChat.Content" xml:space="preserve">
+    <value>聊天</value>
+  </data>
+  <data name="NavSettings.Content" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="StatusText.Text" xml:space="preserve">
+    <value>已斷線</value>
+  </data>
+
+  <!-- C# Code Strings (MainWindow.xaml.cs) -->
+  <data name="StatusDisconnected" xml:space="preserve">
+    <value>已斷線</value>
+  </data>
+  <data name="StatusConnecting" xml:space="preserve">
+    <value>連線中...</value>
+  </data>
+  <data name="StatusConnected" xml:space="preserve">
+    <value>已連線</value>
+  </data>
+
+  <!-- Chat Page -->
+  <data name="TypingIndicator.Text" xml:space="preserve">
+    <value>正在輸入...</value>
+  </data>
+  <data name="ToggleSidebarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>切換聊天清單</value>
+  </data>
+  <data name="ConnectHint.Text" xml:space="preserve">
+    <value>請先在設定中連線 Agent</value>
+  </data>
+  <data name="OpenSettingsButton.Content" xml:space="preserve">
+    <value>開啟設定</value>
+  </data>
+  <data name="InputTextBox.PlaceholderText" xml:space="preserve">
+    <value>輸入訊息...</value>
+  </data>
+  <data name="SendButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>傳送訊息</value>
+  </data>
+  <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>取消產生</value>
+  </data>
+
+  <!-- Settings Page -->
+  <data name="SettingsAgentConfig.Text" xml:space="preserve">
+    <value>Agent 設定</value>
+  </data>
+  <data name="SettingsAgentPathLabel.Text" xml:space="preserve">
+    <value>Agent 路徑</value>
+  </data>
+  <data name="SettingsAgentPathTextBox.PlaceholderText" xml:space="preserve">
+    <value>留空使用 Mock Agent，或輸入 Agent 執行檔路徑</value>
+  </data>
+  <data name="SettingsAgentPathHint.Text" xml:space="preserve">
+    <value>留空以使用內建 Mock Agent 進行展示</value>
+  </data>
+  <data name="SettingsAgentArgsLabel.Text" xml:space="preserve">
+    <value>Agent 參數</value>
+  </data>
+  <data name="SettingsAgentArgsTextBox.PlaceholderText" xml:space="preserve">
+    <value>選填，例如：run --project path/to/project</value>
+  </data>
+  <data name="SettingsAgentArgsHint.Text" xml:space="preserve">
+    <value>啟動 Agent 時傳遞給命令的參數</value>
+  </data>
+  <data name="SettingsWorkDirLabel.Text" xml:space="preserve">
+    <value>工作目錄</value>
+  </data>
+  <data name="SettingsWorkDirTextBox.PlaceholderText" xml:space="preserve">
+    <value>Agent 的工作目錄</value>
+  </data>
+  <data name="SettingsBrowseButton.Content" xml:space="preserve">
+    <value>瀏覽...</value>
+  </data>
+  <data name="SettingsConnectButton.Content" xml:space="preserve">
+    <value>連線</value>
+  </data>
+  <data name="SettingsDisconnectButton.Content" xml:space="preserve">
+    <value>中斷連線</value>
+  </data>
+  <data name="SettingsConnectionStatus.Text" xml:space="preserve">
+    <value>連線狀態</value>
+  </data>
+
+  <!-- Chat List -->
+  <data name="ChatListTitle.Text" xml:space="preserve">
+    <value>聊天</value>
+  </data>
+  <data name="NewChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>新聊天</value>
+  </data>
+  <data name="DeleteChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>刪除聊天</value>
+  </data>
+
+  <!-- Permission Dialog -->
+  <data name="PermissionDialog.Title" xml:space="preserve">
+    <value>權限請求</value>
+  </data>
+  <data name="PermissionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>允許</value>
+  </data>
+  <data name="PermissionDialog.CloseButtonText" xml:space="preserve">
+    <value>拒絕</value>
+  </data>
+  <data name="PermissionDescription.Text" xml:space="preserve">
+    <value>Agent 希望執行以下操作：</value>
+  </data>
+  <data name="UnknownAction" xml:space="preserve">
+    <value>未知操作</value>
+  </data>
+
+  <!-- C# Code Strings (SettingsViewModel.cs) -->
+  <data name="StatusNotConnected" xml:space="preserve">
+    <value>未連線</value>
+  </data>
+  <data name="StatusConnectingProgress" xml:space="preserve">
+    <value>連線中...</value>
+  </data>
+  <data name="StatusConnectedConfirm" xml:space="preserve">
+    <value>已連線</value>
+  </data>
+  <data name="StatusAgentDisconnected" xml:space="preserve">
+    <value>Agent 已斷線 (exit code: {0})</value>
+  </data>
+  <data name="StatusConnectionFailed" xml:space="preserve">
+    <value>連線失敗: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (ChatViewModel.cs + ChatSession.cs) -->
+  <data name="NewChatTitle" xml:space="preserve">
+    <value>新聊天</value>
+  </data>
+  <data name="ErrorPrefix" xml:space="preserve">
+    <value>&#10;[錯誤: {0}]</value>
+  </data>
+  <data name="ToolCallPrefix" xml:space="preserve">
+    <value>[工具: {0}]</value>
+  </data>
+  <data name="MockResponse1" xml:space="preserve">
+    <value>我已收到你的訊息：</value>
+  </data>
+  <data name="MockResponse2" xml:space="preserve">
+    <value>我是運行在 UI 中的 Mock Agent。</value>
+  </data>
+  <data name="MockResponse3" xml:space="preserve">
+    <value>請在設定中連線真正的 ACP Agent 以取得實際回應。</value>
+  </data>
+
+  <!-- C# Code Strings (FileSystemHandler.cs) -->
+  <data name="AccessDeniedMessage" xml:space="preserve">
+    <value>存取被拒: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (TerminalManager.cs) -->
+  <data name="StderrPrefix" xml:space="preserve">
+    <value>[標準錯誤] </value>
+  </data>
+</root>

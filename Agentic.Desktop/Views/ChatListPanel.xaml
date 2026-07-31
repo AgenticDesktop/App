@@ -27,15 +27,13 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       Text="Chats"
+            <TextBlock x:Uid="ChatListTitle" Grid.Column="0"
                        FontSize="16" FontWeight="SemiBold"
                        VerticalAlignment="Center" />
 
-            <Button Grid.Column="1"
+            <Button x:Uid="NewChatButton" Grid.Column="1"
                     Command="{x:Bind ViewModel.CreateNewChatCommand, Mode=OneWay}"
                     Background="Transparent" BorderThickness="0"
-                    ToolTipService.ToolTip="New chat"
                     VerticalAlignment="Center"
                     Padding="6">
                 <FontIcon Glyph="&#xE710;" FontSize="16" />
@@ -72,13 +70,12 @@
                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                         </StackPanel>
 
-                        <Button Grid.Column="1"
+                        <Button x:Uid="DeleteChatButton" Grid.Column="1"
                                 VerticalAlignment="Center"
                                 Background="Transparent" BorderThickness="0"
                                 Padding="4" Opacity="0.6"
                                 Click="DeleteChat_Click"
-                                Tag="{x:Bind}"
-                                ToolTipService.ToolTip="Delete chat">
+                                Tag="{x:Bind}">
                             <FontIcon Glyph="&#xE711;" FontSize="12" />
                         </Button>
                     </Grid>

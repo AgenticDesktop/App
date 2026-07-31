@@ -7,16 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="using:Agentic.ACPLibrary.Models"
     mc:Ignorable="d"
-    Title="Permission Request"
-    PrimaryButtonText="Allow"
-    CloseButtonText="Reject"
+    x:Uid="PermissionDialog"
     DefaultButton="Primary">
 
     <StackPanel Spacing="12">
-        <TextBlock Text="The agent wants to perform the following action:"
+        <TextBlock x:Uid="PermissionDescription"
                    TextWrapping="Wrap"/>
 
-        <!-- 工具调用详情 -->
+        <!-- Tool call details -->
         <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                 BorderThickness="1" CornerRadius="8" Padding="12">
@@ -27,7 +25,7 @@
             </StackPanel>
         </Border>
 
-        <!-- 权限选项（动态生成） -->
+        <!-- Permission options (dynamically generated) -->
         <ItemsRepeater x:Name="OptionsRepeater">
             <ItemsRepeater.ItemTemplate>
                 <DataTemplate x:DataType="models:PermissionOption">

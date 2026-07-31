@@ -1,0 +1,32 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+nodes_managed: true
+exported_at: "2026-07-31T06:03:34Z"
+modules:
+    "":
+        dir_name: Agentic 桌面客户端解决方案
+        title: Agentic 桌面客户端解决方案
+        scope:
+            - README.md
+            - README.en.md
+            - .gitignore
+            - Agentic.Desktop.slnx
+            - Directory.Build.props
+            - global.json
+            - LICENSE
+        source_files: []
+        children:
+            - agentic_desktop
+        depends_on: []
+        related_to: []
+    agentic_desktop:
+        dir_name: Agentic 桌面客户端（WinUI 3）
+        title: Agentic 桌面客户端（WinUI 3）
+        scope:
+            - Agentic.Desktop/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

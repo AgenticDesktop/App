@@ -39,14 +39,14 @@ public partial class App : Application
         WinRT.Interop.WindowNative.GetWindowHandle(Window);
 
     /// <summary>
-    /// 当前连接的 AcpClient（由 Settings 页面设置，Chat 页面读取）
+    /// Currently connected AcpClient (set by Settings page, read by Chat page)
     /// </summary>
     public static IAcpClient? CurrentAcpClient { get; set; }
 
-    /// <summary>连接状态变更事件</summary>
+    /// <summary>Raised when connection state changes.</summary>
     public static event Action<IAcpClient?>? AcpClientChanged;
 
-    /// <summary>全局日志工厂</summary>
+    /// <summary>Global logger factory.</summary>
     public static ILoggerFactory LoggerFactory { get; private set; } = null!;
 
     /// <summary>
@@ -63,7 +63,7 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
-        // 配置日志
+        // Configure logging
         LoggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
         {
             builder.AddDebug();
@@ -75,7 +75,7 @@ public partial class App : Application
         Window.Activate();
     }
 
-    /// <summary>设置当前 AcpClient 并通知订阅者</summary>
+    /// <summary>Sets the current AcpClient and notifies subscribers.</summary>
     public static void SetAcpClient(IAcpClient? client)
     {
         CurrentAcpClient = client;

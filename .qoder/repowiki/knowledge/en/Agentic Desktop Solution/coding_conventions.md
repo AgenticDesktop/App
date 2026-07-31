@@ -1,0 +1,3 @@
+- Nullable reference types and implicit usings are enabled project-wide through Directory.Build.props.
+- Projects use the latest C# language version specified centrally rather than per-project.
+- Solution-level SDK pinning via global.json ensures reproducible builds across environments.

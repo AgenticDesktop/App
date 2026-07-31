@@ -41,13 +41,13 @@ public partial class ChatListViewModel : ObservableObject
         {
             if (Sessions.Count > 0)
             {
-                // 选择相邻的 session
+                // Select adjacent session
                 var newIndex = Math.Min(index, Sessions.Count - 1);
                 SelectChat(Sessions[newIndex]);
             }
             else
             {
-                // 列表为空，自动创建新 session
+                // List is empty, create new session automatically
                 CreateNewChat();
             }
         }

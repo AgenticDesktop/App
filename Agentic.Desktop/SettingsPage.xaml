@@ -20,75 +20,75 @@
             <StackPanel Spacing="16" MaxWidth="600" Margin="24"
                         HorizontalAlignment="Left">
 
-                <!-- Agent 配置 -->
-                <TextBlock Text="Agent 配置" FontSize="20" FontWeight="SemiBold" />
+                <!-- Agent Configuration -->
+                <TextBlock x:Uid="SettingsAgentConfig" FontSize="20" FontWeight="SemiBold" />
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Agent 路径" FontWeight="SemiBold" />
+                    <TextBlock x:Uid="SettingsAgentPathLabel" FontWeight="SemiBold" />
                     <TextBox x:Name="AgentPathTextBox"
+                             x:Uid="SettingsAgentPathTextBox"
                              AutomationProperties.AutomationId="AgentPathTextBox"
-                             Text="{x:Bind ViewModel.AgentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             PlaceholderText="留空使用 Mock Agent，或输入 Agent 可执行文件路径" />
-                    <TextBlock Text="留空将使用内置 Mock Agent 进行演示" FontSize="12"
+                             Text="{x:Bind ViewModel.AgentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock x:Uid="SettingsAgentPathHint" FontSize="12"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="Agent 参数" FontWeight="SemiBold" />
+                    <TextBlock x:Uid="SettingsAgentArgsLabel" FontWeight="SemiBold" />
                     <TextBox x:Name="AgentArgumentsTextBox"
+                             x:Uid="SettingsAgentArgsTextBox"
                              AutomationProperties.AutomationId="AgentArgumentsTextBox"
-                             Text="{x:Bind ViewModel.AgentArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             PlaceholderText="可选，例如: run --project path/to/project" />
-                    <TextBlock Text="启动 Agent 时传递给命令的参数" FontSize="12"
+                             Text="{x:Bind ViewModel.AgentArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock x:Uid="SettingsAgentArgsHint" FontSize="12"
                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
 
                 <StackPanel Spacing="4">
-                    <TextBlock Text="工作目录" FontWeight="SemiBold" />
+                    <TextBlock x:Uid="SettingsWorkDirLabel" FontWeight="SemiBold" />
                     <Grid ColumnSpacing="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="WorkingDirectoryTextBox"
+                                 x:Uid="SettingsWorkDirTextBox"
                                  Grid.Column="0"
                                  AutomationProperties.AutomationId="WorkingDirectoryTextBox"
-                                 Text="{x:Bind ViewModel.WorkingDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                 PlaceholderText="Agent 的工作目录" />
+                                 Text="{x:Bind ViewModel.WorkingDirectory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <Button x:Name="BrowseButton"
+                                x:Uid="SettingsBrowseButton"
                                 Grid.Column="1"
                                 AutomationProperties.AutomationId="BrowseDirectoryButton"
-                                Content="浏览..."
                                 Click="BrowseButton_Click"
                                 VerticalAlignment="Stretch" />
                     </Grid>
                 </StackPanel>
 
-                <!-- 连接控制 -->
+                <!-- Connection Controls -->
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
                     <Button x:Name="ConnectButton"
+                            x:Uid="SettingsConnectButton"
                             AutomationProperties.AutomationId="ConnectButton"
                             Command="{x:Bind ViewModel.ConnectCommand}"
-                            Style="{StaticResource AccentButtonStyle}"
-                            Content="连接" />
+                            Style="{StaticResource AccentButtonStyle}" />
                     <Button x:Name="DisconnectButton"
+                            x:Uid="SettingsDisconnectButton"
                             AutomationProperties.AutomationId="DisconnectButton"
-                            Command="{x:Bind ViewModel.DisconnectCommand}"
-                            Content="断开" />
+                            Command="{x:Bind ViewModel.DisconnectCommand}" />
                     <ProgressRing x:Name="ConnectingRing"
                                   IsActive="{x:Bind ViewModel.IsConnecting, Mode=OneWay}"
                                   Width="20" Height="20"
                                   VerticalAlignment="Center" />
                 </StackPanel>
 
-                <!-- 连接状态 -->
+                <!-- Connection Status -->
                 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                         CornerRadius="8" Padding="16"
                         BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1"
                         Margin="0,8,0,0">
                     <StackPanel Spacing="8">
-                        <TextBlock Text="连接状态" FontWeight="SemiBold" />
+                        <TextBlock x:Uid="SettingsConnectionStatus" FontWeight="SemiBold" />
                         <StackPanel Orientation="Horizontal" Spacing="8">
                             <FontIcon Glyph="&#xE77B;" FontSize="14"
                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" />

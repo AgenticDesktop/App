@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml.Media;
 namespace Agentic.Desktop.Converters;
 
 /// <summary>
-/// 将 ConnectionState (int: 0=Disconnected, 1=Connecting, 2=Connected) 转换为颜色。
+/// Converts ConnectionState (int: 0=Disconnected, 1=Connecting, 2=Connected) to a color.
 /// </summary>
 public class StatusToColorConverter : IValueConverter
 {

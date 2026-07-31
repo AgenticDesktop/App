@@ -1,0 +1,1 @@
+WinUI 3 desktop shell that hosts a NavigationView-based UI with Chat and Settings pages, wiring MVVM ViewModels to XAML views and sharing a global AcpClient connection through the App singleton.

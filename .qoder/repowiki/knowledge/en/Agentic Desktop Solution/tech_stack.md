@@ -1,0 +1,1 @@
+.NET SDK 10.0.100 (global.json), WinUI 3 for the desktop UI, and a shared C# class library; nullable reference types and implicit usings are enforced globally via Directory.Build.props.

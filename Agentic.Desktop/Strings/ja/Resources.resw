@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Global / Navigation -->
+  <data name="NavChat.Content" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="NavSettings.Content" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="StatusText.Text" xml:space="preserve">
+    <value>切断済み</value>
+  </data>
+
+  <!-- C# Code Strings (MainWindow.xaml.cs) -->
+  <data name="StatusDisconnected" xml:space="preserve">
+    <value>切断済み</value>
+  </data>
+  <data name="StatusConnecting" xml:space="preserve">
+    <value>接続中...</value>
+  </data>
+  <data name="StatusConnected" xml:space="preserve">
+    <value>接続済み</value>
+  </data>
+
+  <!-- Chat Page -->
+  <data name="TypingIndicator.Text" xml:space="preserve">
+    <value>入力中...</value>
+  </data>
+  <data name="ToggleSidebarButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>チャット一覧を切り替え</value>
+  </data>
+  <data name="ConnectHint.Text" xml:space="preserve">
+    <value>先に設定で Agent を接続してください</value>
+  </data>
+  <data name="OpenSettingsButton.Content" xml:space="preserve">
+    <value>設定を開く</value>
+  </data>
+  <data name="InputTextBox.PlaceholderText" xml:space="preserve">
+    <value>メッセージを入力...</value>
+  </data>
+  <data name="SendButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>メッセージを送信</value>
+  </data>
+  <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>生成をキャンセル</value>
+  </data>
+
+  <!-- Settings Page -->
+  <data name="SettingsAgentConfig.Text" xml:space="preserve">
+    <value>Agent 構成</value>
+  </data>
+  <data name="SettingsAgentPathLabel.Text" xml:space="preserve">
+    <value>Agent パス</value>
+  </data>
+  <data name="SettingsAgentPathTextBox.PlaceholderText" xml:space="preserve">
+    <value>空欄で Mock Agent を使用、または Agent 実行ファイルのパスを入力</value>
+  </data>
+  <data name="SettingsAgentPathHint.Text" xml:space="preserve">
+    <value>空欄にすると組み込みの Mock Agent を使用してデモできます</value>
+  </data>
+  <data name="SettingsAgentArgsLabel.Text" xml:space="preserve">
+    <value>Agent 引数</value>
+  </data>
+  <data name="SettingsAgentArgsTextBox.PlaceholderText" xml:space="preserve">
+    <value>省略可、例: run --project path/to/project</value>
+  </data>
+  <data name="SettingsAgentArgsHint.Text" xml:space="preserve">
+    <value>Agent 起動時にコマンドへ渡す引数</value>
+  </data>
+  <data name="SettingsWorkDirLabel.Text" xml:space="preserve">
+    <value>作業ディレクトリ</value>
+  </data>
+  <data name="SettingsWorkDirTextBox.PlaceholderText" xml:space="preserve">
+    <value>Agent の作業ディレクトリ</value>
+  </data>
+  <data name="SettingsBrowseButton.Content" xml:space="preserve">
+    <value>参照...</value>
+  </data>
+  <data name="SettingsConnectButton.Content" xml:space="preserve">
+    <value>接続</value>
+  </data>
+  <data name="SettingsDisconnectButton.Content" xml:space="preserve">
+    <value>切断</value>
+  </data>
+  <data name="SettingsConnectionStatus.Text" xml:space="preserve">
+    <value>接続状態</value>
+  </data>
+
+  <!-- Chat List -->
+  <data name="ChatListTitle.Text" xml:space="preserve">
+    <value>チャット</value>
+  </data>
+  <data name="NewChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>新しいチャット</value>
+  </data>
+  <data name="DeleteChatButton.ToolTipService.ToolTip" xml:space="preserve">
+    <value>チャットを削除</value>
+  </data>
+
+  <!-- Permission Dialog -->
+  <data name="PermissionDialog.Title" xml:space="preserve">
+    <value>権限要求</value>
+  </data>
+  <data name="PermissionDialog.PrimaryButtonText" xml:space="preserve">
+    <value>許可</value>
+  </data>
+  <data name="PermissionDialog.CloseButtonText" xml:space="preserve">
+    <value>拒否</value>
+  </data>
+  <data name="PermissionDescription.Text" xml:space="preserve">
+    <value>Agent が次の操作を実行しようとしています：</value>
+  </data>
+  <data name="UnknownAction" xml:space="preserve">
+    <value>不明な操作</value>
+  </data>
+
+  <!-- C# Code Strings (SettingsViewModel.cs) -->
+  <data name="StatusNotConnected" xml:space="preserve">
+    <value>未接続</value>
+  </data>
+  <data name="StatusConnectingProgress" xml:space="preserve">
+    <value>接続中...</value>
+  </data>
+  <data name="StatusConnectedConfirm" xml:space="preserve">
+    <value>接続済み</value>
+  </data>
+  <data name="StatusAgentDisconnected" xml:space="preserve">
+    <value>Agent が切断されました (exit code: {0})</value>
+  </data>
+  <data name="StatusConnectionFailed" xml:space="preserve">
+    <value>接続に失敗しました: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (ChatViewModel.cs + ChatSession.cs) -->
+  <data name="NewChatTitle" xml:space="preserve">
+    <value>新しいチャット</value>
+  </data>
+  <data name="ErrorPrefix" xml:space="preserve">
+    <value>&#10;[エラー: {0}]</value>
+  </data>
+  <data name="ToolCallPrefix" xml:space="preserve">
+    <value>[ツール: {0}]</value>
+  </data>
+  <data name="MockResponse1" xml:space="preserve">
+    <value>メッセージを受け取りました: </value>
+  </data>
+  <data name="MockResponse2" xml:space="preserve">
+    <value>UI で動作しているモック Agent です。 </value>
+  </data>
+  <data name="MockResponse3" xml:space="preserve">
+    <value>設定で実際の ACP Agent を接続すると、実際の応答を取得できます。</value>
+  </data>
+
+  <!-- C# Code Strings (FileSystemHandler.cs) -->
+  <data name="AccessDeniedMessage" xml:space="preserve">
+    <value>アクセスが拒否されました: {0}</value>
+  </data>
+
+  <!-- C# Code Strings (TerminalManager.cs) -->
+  <data name="StderrPrefix" xml:space="preserve">
+    <value>[標準エラー] </value>
+  </data>
+</root>
