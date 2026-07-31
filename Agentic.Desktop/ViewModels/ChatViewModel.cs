@@ -11,6 +11,7 @@ public partial class ChatViewModel : ObservableObject
 {
     private IAcpClient? _acpClient;
     private readonly Microsoft.UI.Dispatching.DispatcherQueue _dispatcherQueue;
+    private static readonly ObservableCollection<ChatMessage> _emptyMessages = new();
 
     [ObservableProperty]
     private string _inputText = string.Empty;
@@ -24,7 +25,12 @@ public partial class ChatViewModel : ObservableObject
     [ObservableProperty]
     private ChatMessage? _currentAgentMessage;
 
-    public ObservableCollection<ChatMessage> Messages { get; } = new();
+    public ChatListViewModel ChatList { get; } = new();
+
+    public ObservableCollection<ChatMessage> Messages =>
+        ChatList.SelectedSession?.Messages ?? _emptyMessages;
+
+    public event Action? ScrollToBottom;
 
     // 帧级合并相关
     private readonly object _lock = new();
@@ -34,6 +40,34 @@ public partial class ChatViewModel : ObservableObject
     public ChatViewModel()
     {
         _dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+        ChatList.SessionChanged += OnSessionChanged;
+    }
+
+    private ObservableCollection<ChatMessage>? _subscribedMessages;
+    private System.Collections.Specialized.NotifyCollectionChangedEventHandler? _messagesHandler;
+
+    private void OnSessionChanged(ChatSession session)
+    {
+        // Cancel any in-progress streaming to prevent corruption
+        if (IsAgentResponding)
+        {
+            _ = CancelGenerationAsync();
+        }
+
+        // Unsubscribe from old session's Messages collection
+        if (_subscribedMessages is not null && _messagesHandler is not null)
+        {
+            _subscribedMessages.CollectionChanged -= _messagesHandler;
+        }
+
+        OnPropertyChanged(nameof(Messages));
+
+        // Subscribe to new session's Messages collection
+        _messagesHandler = (_, _) => ScrollToBottom?.Invoke();
+        _subscribedMessages = Messages;
+        _subscribedMessages.CollectionChanged += _messagesHandler;
+
+        ScrollToBottom?.Invoke();
     }
 
     /// <summary>绑定 AcpClient（从 Settings 连接后调用）</summary>
@@ -49,7 +83,7 @@ public partial class ChatViewModel : ObservableObject
         IsAgentConnected = true;
     }
 
-    /// <summary>清除所有消息（断开连接时调用）</summary>
+    /// <summary>清除当前会话的消息（断开连接时调用）</summary>
     public void ClearMessages()
     {
         Messages.Clear();
@@ -67,6 +101,15 @@ public partial class ChatViewModel : ObservableObject
 
         // 添加用户消息
         Messages.Add(new ChatMessage(MessageRole.User, text));
+
+        // 更新 session 标题和预览
+        if (ChatList.SelectedSession is { } session)
+        {
+            if (session.Title == "New Chat")
+                session.Title = text.Length > 30 ? text[..30] + "..." : text;
+            session.PreviewText = text.Length > 50 ? text[..50] + "..." : text;
+            session.UpdatedAt = DateTime.Now;
+        }
 
         // 创建 Agent 消息占位
         var agentMsg = new ChatMessage(MessageRole.Agent) { IsStreaming = true };
@@ -138,9 +181,20 @@ public partial class ChatViewModel : ObservableObject
             case ToolCallNotification toolCall:
                 _dispatcherQueue.TryEnqueue(() =>
                 {
-                    var toolMsg = new ChatMessage(MessageRole.System,
-                        $"[Tool: {toolCall.Title}]");
-                    Messages.Add(toolMsg);
+                    var currentMessages = ChatList.SelectedSession?.Messages;
+                    if (currentMessages is not null)
+                    {
+                        var toolMsg = new ChatMessage(MessageRole.System,
+                            $"[Tool: {toolCall.Title}]");
+                        currentMessages.Add(toolMsg);
+                    }
+
+                    // 更新 session 预览
+                    if (ChatList.SelectedSession is { } session)
+                    {
+                        session.PreviewText = $"[Tool: {toolCall.Title}]";
+                        session.UpdatedAt = DateTime.Now;
+                    }
                 });
                 break;
         }

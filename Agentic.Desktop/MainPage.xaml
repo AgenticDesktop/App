@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Agentic.Desktop.ViewModels"
     xmlns:msg="using:Agentic.Desktop.ViewModels.Messages"
+    xmlns:views="using:Agentic.Desktop.Views"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -52,83 +53,110 @@
                                             AgentTemplate="{StaticResource AgentMessageTemplate}" />
     </Page.Resources>
 
-    <Grid RowSpacing="0">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <SplitView x:Name="ChatSplitView"
+               DisplayMode="Inline"
+               IsPaneOpen="True"
+               OpenPaneLength="280"
+               PaneBackground="{ThemeResource CardBackgroundFillColorDefaultBrush}">
 
-        <!-- Message list -->
-        <ScrollViewer x:Name="MessageScroller" Grid.Row="0"
-                      VerticalScrollBarVisibility="Auto"
-                      Padding="8,12">
-            <Grid>
-                <!-- 未连接时的提示 -->
-                <StackPanel x:Name="ConnectHintPanel"
-                            VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Spacing="12" Margin="40"
-                            Visibility="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Invert'}">
-                    <FontIcon Glyph="&#xE77B;" FontSize="48"
-                              Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                              HorizontalAlignment="Center" />
-                    <TextBlock Text="请先在设置中连接 Agent"
-                               FontSize="16"
-                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                               HorizontalAlignment="Center" />
-                    <HyperlinkButton Content="打开设置"
-                                     HorizontalAlignment="Center"
-                                     Click="OpenSettings_Click" />
-                </StackPanel>
-                <ItemsRepeater ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
-                               ItemTemplate="{StaticResource ChatTemplateSelector}">
-                    <ItemsRepeater.Layout>
-                        <StackLayout Spacing="2" />
-                    </ItemsRepeater.Layout>
-                </ItemsRepeater>
+        <!-- Pane: Chat List Sidebar -->
+        <SplitView.Pane>
+            <views:ChatListPanel x:Name="ChatListPanel" />
+        </SplitView.Pane>
+
+        <!-- Content: Existing chat UI -->
+        <SplitView.Content>
+            <Grid RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Toggle button overlay -->
+                <Button x:Name="ToggleSidebarButton"
+                        Grid.Row="0"
+                        HorizontalAlignment="Left" VerticalAlignment="Top"
+                        Margin="8,8,0,0"
+                        Background="Transparent" BorderThickness="0"
+                        Click="ToggleSidebar_Click"
+                        ToolTipService.ToolTip="Toggle chats list"
+                        Canvas.ZIndex="100">
+                    <FontIcon Glyph="&#xE700;" FontSize="16" />
+                </Button>
+
+                <!-- Message list -->
+                <ScrollViewer x:Name="MessageScroller" Grid.Row="0"
+                              VerticalScrollBarVisibility="Auto"
+                              Padding="8,12">
+                    <Grid>
+                        <!-- 未连接时的提示 -->
+                        <StackPanel x:Name="ConnectHintPanel"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                                    Spacing="12" Margin="40"
+                                    Visibility="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='Invert'}">
+                            <FontIcon Glyph="&#xE77B;" FontSize="48"
+                                      Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                      HorizontalAlignment="Center" />
+                            <TextBlock Text="请先在设置中连接 Agent"
+                                       FontSize="16"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                       HorizontalAlignment="Center" />
+                            <HyperlinkButton Content="打开设置"
+                                             HorizontalAlignment="Center"
+                                             Click="OpenSettings_Click" />
+                        </StackPanel>
+                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
+                                       ItemTemplate="{StaticResource ChatTemplateSelector}">
+                            <ItemsRepeater.Layout>
+                                <StackLayout Spacing="2" />
+                            </ItemsRepeater.Layout>
+                        </ItemsRepeater>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Input area -->
+                <Border Grid.Row="1" Padding="12"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="0,1,0,0"
+                        Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
+                    <Grid ColumnSpacing="8" MaxWidth="800" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox x:Name="InputTextBox"
+                                 Grid.Column="0"
+                                 AutomationProperties.AutomationId="ChatInputTextBox"
+                                 Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 PlaceholderText="输入消息..."
+                                 AcceptsReturn="False"
+                                 IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
+                                 KeyDown="InputTextBox_KeyDown"
+                                 VerticalAlignment="Center" />
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+                            <Button x:Name="SendButton"
+                                    AutomationProperties.AutomationId="SendButton"
+                                    Command="{x:Bind ViewModel.SendMessageCommand}"
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
+                                    VerticalAlignment="Center"
+                                    ToolTipService.ToolTip="发送消息">
+                                <FontIcon Glyph="&#xE724;" FontSize="16" />
+                            </Button>
+                            <Button x:Name="CancelButton"
+                                    AutomationProperties.AutomationId="CancelButton"
+                                    Command="{x:Bind ViewModel.CancelGenerationCommand}"
+                                    Visibility="{x:Bind ViewModel.IsAgentResponding, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                                    VerticalAlignment="Center"
+                                    ToolTipService.ToolTip="取消生成">
+                                <FontIcon Glyph="&#xE711;" FontSize="16" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
-        </ScrollViewer>
-
-        <!-- Input area -->
-        <Border Grid.Row="1" Padding="12"
-                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                BorderThickness="0,1,0,0"
-                Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}">
-            <Grid ColumnSpacing="8" MaxWidth="800" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <TextBox x:Name="InputTextBox"
-                         Grid.Column="0"
-                         AutomationProperties.AutomationId="ChatInputTextBox"
-                         Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         PlaceholderText="输入消息..."
-                         AcceptsReturn="False"
-                         IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
-                         KeyDown="InputTextBox_KeyDown"
-                         VerticalAlignment="Center" />
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
-                    <Button x:Name="SendButton"
-                            AutomationProperties.AutomationId="SendButton"
-                            Command="{x:Bind ViewModel.SendMessageCommand}"
-                            Style="{StaticResource AccentButtonStyle}"
-                            IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
-                            VerticalAlignment="Center"
-                            ToolTipService.ToolTip="发送消息">
-                        <FontIcon Glyph="&#xE724;" FontSize="16" />
-                    </Button>
-                    <Button x:Name="CancelButton"
-                            AutomationProperties.AutomationId="CancelButton"
-                            Command="{x:Bind ViewModel.CancelGenerationCommand}"
-                            Visibility="{x:Bind ViewModel.IsAgentResponding, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
-                            VerticalAlignment="Center"
-                            ToolTipService.ToolTip="取消生成">
-                        <FontIcon Glyph="&#xE711;" FontSize="16" />
-                    </Button>
-                </StackPanel>
-            </Grid>
-        </Border>
-    </Grid>
+        </SplitView.Content>
+    </SplitView>
 </Page>

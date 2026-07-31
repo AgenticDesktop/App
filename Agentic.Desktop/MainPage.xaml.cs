@@ -16,7 +16,12 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         InitializeComponent();
-        ViewModel.Messages.CollectionChanged += (_, _) => ScrollToBottom();
+
+        // 绑定 ChatList 到侧边栏
+        ChatListPanel.ViewModel = ViewModel.ChatList;
+
+        // 订阅滚动事件
+        ViewModel.ScrollToBottom += ScrollToBottom;
 
         // 如果已有连接的 AcpClient，立即绑定
         if (App.CurrentAcpClient is not null)
@@ -57,6 +62,11 @@ public sealed partial class MainPage : Page
             if (ViewModel.SendMessageCommand.CanExecute(null))
                 ViewModel.SendMessageCommand.Execute(null);
         }
+    }
+
+    private void ToggleSidebar_Click(object sender, RoutedEventArgs e)
+    {
+        ChatSplitView.IsPaneOpen = !ChatSplitView.IsPaneOpen;
     }
 
     private void ScrollToBottom()

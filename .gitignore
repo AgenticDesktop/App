@@ -430,3 +430,5 @@ FodyWeavers.xsd
 
 # Some interesting files
 BuildAndRun.ps1
+.qoder/*
+!.qoder/repowiki
