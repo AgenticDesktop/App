@@ -10,14 +10,14 @@
 
   <Identity
     Name="11E010C2-1260-4086-AB11-CB71235F9979"
-    Publisher="CN=AppPublisher"
+    Publisher="CN=Shihao Shen"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="11E010C2-1260-4086-AB11-CB71235F9979" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Agentic.Desktop</DisplayName>
-    <PublisherDisplayName>AppPublisher</PublisherDisplayName>
+    <DisplayName>Agentic Desktop</DisplayName>
+    <PublisherDisplayName>Shihao Shen</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -38,8 +38,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Agentic.Desktop"
-        Description="Agentic.Desktop"
+        DisplayName="Agentic Desktop"
+        Description="Agentic Desktop"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"
         Square44x44Logo="Assets\Square44x44Logo.png">
