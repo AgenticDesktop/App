@@ -2,4 +2,7 @@
   <Project Path="Agentic.Desktop/Agentic.Desktop.csproj">
     <Platform Project="x86" />
   </Project>
+  <Project Path="Agentic.Desktop.Tests/Agentic.Desktop.Tests.csproj">
+    <Platform Project="x86" />
+  </Project>
 </Solution>

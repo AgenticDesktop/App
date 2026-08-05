@@ -4,4 +4,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <!-- WinUI Analyzer: pinned as project-owned reference.
+       Both bare `dotnet build` and BuildAndRun.ps1 share this single source of truth.
+       Place the pre-built DLL + targets under $(MSBuildThisFileDirectory)analyzer\ to activate. -->
+  <PropertyGroup>
+    <_WinUiAnalyzerDir>$(MSBuildThisFileDirectory)analyzer</_WinUiAnalyzerDir>
+    <_WinUiAnalyzerDll>$(_WinUiAnalyzerDir)\Microsoft.WindowsAppSDK.Analyzers.dll</_WinUiAnalyzerDll>
+    <_WinUiAnalyzerTargets>$(_WinUiAnalyzerDir)\Microsoft.WindowsAppSDK.Analyzers.targets</_WinUiAnalyzerTargets>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(_WinUiAnalyzerDll)')">
+    <Analyzer Include="$(_WinUiAnalyzerDll)" />
+  </ItemGroup>
+
+  <Import Project="$(_WinUiAnalyzerTargets)" Condition="Exists('$(_WinUiAnalyzerTargets)')" />
 </Project>

@@ -56,12 +56,19 @@ winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
 App/
 ├── ViewModels/          # MVVM view models
 │   ├── ChatViewModel.cs         # Chat logic, streaming message handling
+│   ├── ChatListViewModel.cs     # Chat session list management
 │   ├── SettingsViewModel.cs     # Agent connection management
-│   └── Messages/ChatMessage.cs  # Message model
-├── Views/               # Dialogs
-│   └── PermissionDialog.xaml    # Permission confirmation dialog
+│   └── Messages/
+│       ├── ChatMessage.cs       # Message model
+│       └── ChatSession.cs       # Chat session model
+├── Views/               # Dialogs and panels
+│   ├── ChatListPanel.xaml       # Chat session list panel
+│   ├── ChatListPanel.xaml.cs
+│   ├── PermissionDialog.xaml    # Permission confirmation dialog
+│   └── PermissionDialog.xaml.cs
 ├── Services/            # Core services
 │   ├── FileSystemHandler.cs     # File system permission handling
+│   ├── LocalizationService.cs   # Localization / i18n
 │   ├── PermissionHandler.cs     # Permission request UI dispatching
 │   ├── TerminalManager.cs       # Terminal session management
 │   └── MarkdownHelper.cs        # Markdown rendering

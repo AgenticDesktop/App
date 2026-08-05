@@ -108,6 +108,7 @@
                         <ItemsRepeater ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
                                        ItemTemplate="{StaticResource ChatTemplateSelector}">
                             <ItemsRepeater.Layout>
+                                <!-- StackLayout derives from VirtualizingLayout: virtualization enabled -->
                                 <StackLayout Spacing="2" />
                             </ItemsRepeater.Layout>
                         </ItemsRepeater>

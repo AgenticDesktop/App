@@ -35,8 +35,17 @@ public partial class App : Application
     /// <c>DataTransferManager</c>, and any WinRT interop that requires
     /// <c>InitializeWithWindow</c>.
     /// </summary>
-    public static nint WindowHandle =>
-        WinRT.Interop.WindowNative.GetWindowHandle(Window);
+    public static nint WindowHandle
+    {
+        get
+        {
+#if WINDOWS
+            return WinRT.Interop.WindowNative.GetWindowHandle(Window);
+#else
+            return nint.Zero;
+#endif
+        }
+    }
 
     /// <summary>
     /// Currently connected AcpClient (set by Settings page, read by Chat page)

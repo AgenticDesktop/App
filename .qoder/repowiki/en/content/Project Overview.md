@@ -3,6 +3,9 @@
 <cite>
 **Referenced Files in This Document**
 - [README.md](file://README.md)
+- [README.zh-CN.md](file://README.zh-CN.md)
+- [README.zh-TW.md](file://README.zh-TW.md)
+- [README.ja.md](file://README.ja.md)
 - [Agentic.Desktop.csproj](file://Agentic.Desktop/Agentic.Desktop.csproj)
 - [global.json](file://global.json)
 - [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
@@ -18,16 +21,25 @@
 - [LocalizationService.cs](file://Agentic.Desktop/Services/LocalizationService.cs)
 </cite>
 
+## Update Summary
+**Changes Made**
+- Updated Introduction section to reflect the comprehensive English README rewrite
+- Added Multi-Language Support section documenting the four language variants
+- Enhanced Tech Stack section with updated version information from the new README
+- Updated Quick Start and Usage sections based on the standardized README format
+- Added internationalization considerations for developers
+
 ## Table of Contents
 1. [Introduction](#introduction)
-2. [Project Structure](#project-structure)
-3. [Core Components](#core-components)
-4. [Architecture Overview](#architecture-overview)
-5. [Detailed Component Analysis](#detailed-component-analysis)
-6. [Dependency Analysis](#dependency-analysis)
-7. [Performance Considerations](#performance-considerations)
-8. [Troubleshooting Guide](#troubleshooting-guide)
-9. [Conclusion](#conclusion)
+2. [Multi-Language Support](#multi-language-support)
+3. [Project Structure](#project-structure)
+4. [Core Components](#core-components)
+5. [Architecture Overview](#architecture-overview)
+6. [Detailed Component Analysis](#detailed-component-analysis)
+7. [Dependency Analysis](#dependency-analysis)
+8. [Performance Considerations](#performance-considerations)
+9. [Troubleshooting Guide](#troubleshooting-guide)
+10. [Conclusion](#conclusion)
 
 ## Introduction
 Agentic.Desktop is a WinUI 3 desktop client for ACP (Agent Communication Protocol). Its purpose is to provide a modern, Fluent Design chat interface that lets users interact with ACP-compatible agents through a real-time streaming conversation experience. The application connects to any ACP agent executable via the stdio transport layer and supports features such as Markdown rendering, permission management, and terminal command execution initiated by agents. It also includes a built-in mock agent to demonstrate the full UI flow without requiring a real agent process.
@@ -48,9 +60,41 @@ Practical capabilities demonstrated by the application include:
 - Terminal session management for executing shell commands on behalf of agents.
 
 **Section sources**
-- [README.md:1-92](file://README.md#L1-L92)
-- [Agentic.Desktop.csproj:1-79](file://Agentic.Desktop/Agentic.Desktop.csproj#L1-L79)
-- [global.json:1-8](file://global.json#L1-L8)
+- [README.md:1-94](file://README.md#L1-L94)
+- [Agentic.Desktop.csproj:1-83](file://Agentic.Desktop/Agentic.Desktop.csproj#L1-L83)
+- [global.json:1-11](file://global.json#L1-L11)
+
+## Multi-Language Support
+Agentic.Desktop provides comprehensive internationalization support with four complete README documentation variants:
+
+### Supported Languages
+- **English** (README.md) - Primary documentation with detailed technical specifications
+- **Simplified Chinese** (README.zh-CN.md) - Complete translation for mainland Chinese users
+- **Traditional Chinese** (README.zh-TW.md) - Localized version for Taiwan and Hong Kong users  
+- **Japanese** (README.ja.md) - Full Japanese translation with culturally appropriate terminology
+
+### Documentation Features
+Each language variant maintains feature parity with:
+- Consistent technical accuracy across all translations
+- Properly localized command-line instructions
+- Culturally adapted examples and screenshots references
+- Standardized terminology aligned with local developer communities
+- Cross-references between language versions for easy navigation
+
+### Internationalization Architecture
+The application uses a robust localization system supporting runtime language switching:
+- Resource files (.resw) for each supported language
+- Dynamic string loading based on system locale
+- Fallback mechanisms for missing translations
+- Extensible framework for adding new languages
+
+This multi-language approach ensures global accessibility while maintaining technical precision across different linguistic contexts.
+
+**Section sources**
+- [README.md:1-3](file://README.md#L1-L3)
+- [README.zh-CN.md:1-3](file://README.zh-CN.md#L1-L3)
+- [README.zh-TW.md:1-3](file://README.zh-TW.md#L1-L3)
+- [README.ja.md:1-3](file://README.ja.md#L1-L3)
 
 ## Project Structure
 The repository follows a feature-oriented layout with clear separation between Views, ViewModels, and Services:
@@ -98,22 +142,22 @@ App --> MainWindow
 ```
 
 **Diagram sources**
-- [MainWindow.xaml.cs:1-97](file://Agentic.Desktop/MainWindow.xaml.cs#L1-L97)
-- [App.xaml.cs:1-85](file://Agentic.Desktop/App.xaml.cs#L1-L85)
-- [ChatViewModel.cs:1-235](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L235)
+- [MainWindow.xaml.cs:1-101](file://Agentic.Desktop/MainWindow.xaml.cs#L1-L101)
+- [App.xaml.cs:1-94](file://Agentic.Desktop/App.xaml.cs#L1-L94)
+- [ChatViewModel.cs:1-239](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L239)
 - [SettingsViewModel.cs:1-162](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs#L1-L162)
 - [PermissionHandler.cs:1-52](file://Agentic.Desktop/Services/PermissionHandler.cs#L1-L52)
-- [TerminalManager.cs:1-161](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L161)
+- [TerminalManager.cs:1-170](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L170)
 - [MarkdownHelper.cs:1-52](file://Agentic.Desktop/Services/MarkdownHelper.cs#L1-L52)
 - [MockAgentTransport.cs:1-142](file://Agentic.Desktop/Mocks/MockAgentTransport.cs#L1-L142)
 - [ChatMessage.cs:1-39](file://Agentic.Desktop/ViewModels/Messages/ChatMessage.cs#L1-L39)
 - [ChatSession.cs:1-28](file://Agentic.Desktop/ViewModels/Messages/ChatSession.cs#L1-L28)
 
 **Section sources**
-- [README.md:51-71](file://README.md#L51-L71)
+- [README.md:53-73](file://README.md#L53-L73)
 
 ## Core Components
-This section highlights the core components that power the application’s functionality and their responsibilities:
+This section highlights the core components that power the application's functionality and their responsibilities:
 
 - Application bootstrap and global state:
   - App exposes the main window, dispatcher queue, native handle, and current AcpClient instance. It also raises events when the AcpClient changes.
@@ -135,12 +179,12 @@ This section highlights the core components that power the application’s funct
 These components collectively enable a robust, extensible desktop client for ACP agents.
 
 **Section sources**
-- [App.xaml.cs:1-85](file://Agentic.Desktop/App.xaml.cs#L1-L85)
-- [MainWindow.xaml.cs:1-97](file://Agentic.Desktop/MainWindow.xaml.cs#L1-L97)
-- [ChatViewModel.cs:1-235](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L235)
+- [App.xaml.cs:1-94](file://Agentic.Desktop/App.xaml.cs#L1-L94)
+- [MainWindow.xaml.cs:1-101](file://Agentic.Desktop/MainWindow.xaml.cs#L1-L101)
+- [ChatViewModel.cs:1-239](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L239)
 - [SettingsViewModel.cs:1-162](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs#L1-L162)
 - [PermissionHandler.cs:1-52](file://Agentic.Desktop/Services/PermissionHandler.cs#L1-L52)
-- [TerminalManager.cs:1-161](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L161)
+- [TerminalManager.cs:1-170](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L170)
 - [MarkdownHelper.cs:1-52](file://Agentic.Desktop/Services/MarkdownHelper.cs#L1-L52)
 - [LocalizationService.cs:1-23](file://Agentic.Desktop/Services/LocalizationService.cs#L1-L23)
 
@@ -227,12 +271,12 @@ ChatViewModel --> ChatSession : "manages via ChatList"
 ```
 
 **Diagram sources**
-- [ChatViewModel.cs:11-235](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L11-L235)
+- [ChatViewModel.cs:11-239](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L11-L239)
 - [ChatMessage.cs:14-39](file://Agentic.Desktop/ViewModels/Messages/ChatMessage.cs#L14-L39)
 - [ChatSession.cs:10-28](file://Agentic.Desktop/ViewModels/Messages/ChatSession.cs#L10-L28)
 
 **Section sources**
-- [ChatViewModel.cs:1-235](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L235)
+- [ChatViewModel.cs:1-239](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L1-L239)
 - [ChatMessage.cs:1-39](file://Agentic.Desktop/ViewModels/Messages/ChatMessage.cs#L1-L39)
 - [ChatSession.cs:1-28](file://Agentic.Desktop/ViewModels/Messages/ChatSession.cs#L1-L28)
 
@@ -321,10 +365,10 @@ TerminalManager --> TerminalInstance : "manages multiple instances"
 ```
 
 **Diagram sources**
-- [TerminalManager.cs:11-161](file://Agentic.Desktop/Services/TerminalManager.cs#L11-L161)
+- [TerminalManager.cs:11-170](file://Agentic.Desktop/Services/TerminalManager.cs#L11-L170)
 
 **Section sources**
-- [TerminalManager.cs:1-161](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L161)
+- [TerminalManager.cs:1-170](file://Agentic.Desktop/Services/TerminalManager.cs#L1-L170)
 
 ### Markdown Rendering Analysis
 MarkdownHelper provides utilities for converting Markdown to HTML or plain text:
@@ -364,7 +408,7 @@ Net["NET 10.0"]
 WinAppSDK["Windows App SDK 2.3.1"]
 MVVM["CommunityToolkit.Mvvm 8.4.2"]
 Markdig["Markdig 1.3.2"]
-ACP["ShihaoShen.Agentic.ACPLibrary 0.1.0-beta.3"]
+ACP["ShihaoShen.Agentic.ACPLibrary 0.1.0-nightly.1ad856d0d1c865d194a161c6481986a2260b4c50"]
 Logging["Microsoft.Extensions.Logging.Debug 9.0.7"]
 App --> Net
 App --> WinAppSDK
@@ -375,12 +419,12 @@ App --> Logging
 ```
 
 **Diagram sources**
-- [Agentic.Desktop.csproj:53-60](file://Agentic.Desktop/Agentic.Desktop.csproj#L53-L60)
-- [global.json:1-8](file://global.json#L1-L8)
+- [Agentic.Desktop.csproj:42-54](file://Agentic.Desktop/Agentic.Desktop.csproj#L42-L54)
+- [global.json:1-11](file://global.json#L1-L11)
 
 **Section sources**
-- [Agentic.Desktop.csproj:1-79](file://Agentic.Desktop/Agentic.Desktop.csproj#L1-L79)
-- [global.json:1-8](file://global.json#L1-L8)
+- [Agentic.Desktop.csproj:1-83](file://Agentic.Desktop/Agentic.Desktop.csproj#L1-L83)
+- [global.json:1-11](file://global.json#L1-L11)
 
 ## Performance Considerations
 - Streaming updates are batched with a 50ms delay to reduce UI churn during high-frequency agent responses.
@@ -405,5 +449,7 @@ Common issues and resolutions:
 
 ## Conclusion
 Agentic.Desktop provides a comprehensive, modern desktop client for interacting with ACP-compatible agents. Its MVVM architecture, robust transport abstraction, and rich feature set make it an excellent foundation for building intelligent desktop applications. The combination of real-time streaming, Markdown processing, permission management, and terminal control enables powerful agent interactions while maintaining a clean, maintainable codebase.
+
+The addition of comprehensive multi-language documentation (English, Simplified Chinese, Traditional Chinese, and Japanese) ensures global accessibility and makes the project approachable for developers worldwide. Each language variant maintains technical accuracy while adapting terminology and examples to local developer communities.
 
 [No sources needed since this section summarizes without analyzing specific files]

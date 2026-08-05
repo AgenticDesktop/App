@@ -82,9 +82,11 @@ public sealed partial class SettingsPage : Page
         picker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
         picker.FileTypeFilter.Add("*");
 
+#if WINDOWS
         // WinUI 3: need to initialize with hwnd
         var hwnd = App.WindowHandle;
         WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+#endif
 
         var folder = await picker.PickSingleFolderAsync();
         if (folder is not null)

@@ -17,13 +17,17 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
 
+#if WINDOWS
+        SystemBackdrop = new MicaBackdrop();
+#endif
+
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
 
         AppWindow.SetIcon("Assets/AppIcon.ico");
 
-        // Set appropriate window size
-        AppWindow.Resize(new Windows.Graphics.SizeInt32(1200, 780));
+        // Set appropriate window size (object initializer: Uno projection lacks the 2-arg ctor)
+        AppWindow.Resize(new Windows.Graphics.SizeInt32 { Width = 1200, Height = 780 });
     }
 
     /// <summary>Updates the connection status indicator.</summary>
