@@ -38,6 +38,40 @@
             </TitleBar.Content>
         </TitleBar>
 
+        <!-- Fallback title bar for Uno (where Microsoft.UI.Xaml.Controls.TitleBar is not implemented).
+             Hidden on Windows; shown on other platforms via code-behind. -->
+        <Grid x:Name="AppTitleBarFallback"
+              Height="40"
+              Visibility="Collapsed"
+              Padding="12,0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Top"
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+            <Image Grid.Column="0"
+                   Source="Assets/AppIcon.ico"
+                   Width="16" Height="16"
+                   VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1"
+                       Text="Agentic.Desktop"
+                       VerticalAlignment="Center"
+                       Margin="8,0,0,0"
+                       FontWeight="SemiBold" />
+            <Ellipse x:Name="StatusDotFallback"
+                     Grid.Column="3"
+                     Width="8" Height="8"
+                     Fill="Gray"
+                     VerticalAlignment="Center"
+                     AutomationProperties.AutomationId="ConnectionStatusDotFallback" />
+            <TextBlock x:Name="StatusTextFallback"
+                       Grid.Column="4"
+                       x:Uid="StatusText"
+                       FontSize="12"
+                       VerticalAlignment="Center"
+                       Margin="6,0,0,0"
+                       AutomationProperties.AutomationId="ConnectionStatusTextFallback" />
+        </Grid>
+
         <NavigationView x:Name="RootNavView" Grid.Row="1"
                         PaneDisplayMode="Left"
                         IsBackButtonVisible="Collapsed"

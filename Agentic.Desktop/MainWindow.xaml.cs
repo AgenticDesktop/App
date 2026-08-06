@@ -19,10 +19,20 @@ public sealed partial class MainWindow : Window
 
 #if WINDOWS
         SystemBackdrop = new MicaBackdrop();
-#endif
-
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
+#else
+        // Uno: Microsoft.UI.Xaml.Controls.TitleBar is not implemented. Show the
+        // fallback Grid title bar and let NavigationView provide its own pane
+        // toggle button (the TitleBar-based toggle is unavailable here).
+        // Extend the fallback into the system title bar area to avoid a
+        // double title bar (native Win32 caption + fallback Grid).
+        AppTitleBar.Visibility = Visibility.Collapsed;
+        AppTitleBarFallback.Visibility = Visibility.Visible;
+        RootNavView.IsPaneToggleButtonVisible = true;
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBarFallback);
+#endif
 
         AppWindow.SetIcon("Assets/AppIcon.ico");
 
@@ -35,19 +45,26 @@ public sealed partial class MainWindow : Window
     {
         DispatcherQueue.TryEnqueue(() =>
         {
+#if WINDOWS
+            var dot = StatusDot;
+            var text = StatusText;
+#else
+            var dot = StatusDotFallback;
+            var text = StatusTextFallback;
+#endif
             switch (state)
             {
                 case 0: // Disconnected
-                    StatusDot.Fill = new SolidColorBrush(Colors.Gray);
-                    StatusText.Text = LocalizationService.Get("StatusDisconnected");
+                    dot.Fill = new SolidColorBrush(Colors.Gray);
+                    text.Text = LocalizationService.Get("StatusDisconnected");
                     break;
                 case 1: // Connecting
-                    StatusDot.Fill = new SolidColorBrush(Colors.Gold);
-                    StatusText.Text = LocalizationService.Get("StatusConnecting");
+                    dot.Fill = new SolidColorBrush(Colors.Gold);
+                    text.Text = LocalizationService.Get("StatusConnecting");
                     break;
                 case 2: // Connected
-                    StatusDot.Fill = new SolidColorBrush(Colors.LimeGreen);
-                    StatusText.Text = agentName ?? LocalizationService.Get("StatusConnected");
+                    dot.Fill = new SolidColorBrush(Colors.LimeGreen);
+                    text.Text = agentName ?? LocalizationService.Get("StatusConnected");
                     break;
             }
         });
