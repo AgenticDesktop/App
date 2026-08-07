@@ -2,7 +2,7 @@
 
 English | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [日本語](README.ja.md)
 
-A WinUI 3-based ACP (Agent Communication Protocol) desktop client that provides a chat interface for interacting with AI Agents.
+An ACP (Agent Communication Protocol) desktop client built on WinUI 3 + Uno Platform. It targets two frameworks from a single codebase: a native **WinUI 3** build (MSIX-packaged, Mica backdrop) and a cross-platform **Uno Desktop / Skia** build (direct exe, no packaging).
 
 ## Features
 
@@ -12,6 +12,7 @@ A WinUI 3-based ACP (Agent Communication Protocol) desktop client that provides 
 - **Permission Management** — Interactive confirmation dialog when Agents request file/terminal permissions
 - **Terminal Management** — Support for terminal command execution initiated by Agents
 - **Fluent Design** — Mica background, acrylic material, adaptive theme
+- **Dual-target** — Single XAML codebase produces a native WinUI 3 app and an Uno Skia desktop app
 
 ## Tech Stack
 
@@ -19,26 +20,56 @@ A WinUI 3-based ACP (Agent Communication Protocol) desktop client that provides 
 | ----------- | --------- |
 | .NET | 10.0 |
 | Windows App SDK | 2.3.1 |
+| Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-beta.3 |
+| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
 
 ## System Requirements
 
 - Windows 10 1809 (Build 17763) or later
 - [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [WinApp CLI](https://learn.microsoft.com/windows/apps/windows-app-sdk/) (`dotnet tool install -g winapp`)
-- **Developer Mode** enabled (Settings > System > Developer Options)
+- **Developer Mode** enabled (Settings > System > Developer Options) — required only for the WinUI / MSIX target
 
 ## Quick Start
 
+The repo ships two convenience scripts (alongside the general-purpose `BuildAndRun.ps1`):
+
+| Script | Target | Launch | Needs Dev Mode |
+| ------ | ------ | ------ | -------------- |
+| `winui.ps1` | `net10.0-windows10.0.26100` (WinUI 3, MSIX) | `winapp run` | Yes |
+| `uno.ps1` | `net10.0-desktop` (Uno / Skia, direct exe) | runs `.exe` directly | No |
+
 ```powershell
-# Clone the repository
+# WinUI 3 build (packaged, native)
+.\winui.ps1                  # build + run (foreground)
+.\winui.ps1 -Detach          # build + launch in background
+.\winui.ps1 -SkipRun         # build only
+
+# Uno Desktop build (Skia, direct exe)
+.\uno.ps1                    # build + run (foreground)
+.\uno.ps1 -Detach            # build + launch in background
+.\uno.ps1 -SkipRun           # build only
+```
+
+Manual build (without scripts):
+
+```powershell
 git clone https://github.com/AgenticDesktop/App.git
 cd App
-dotnet build -p:Platform=x64
-winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
+
+# WinUI 3
+dotnet build -p:Platform=x64 -f net10.0-windows10.0.26100 -m:1
+winapp run Agentic.Desktop\bin\x64\Debug\net10.0-windows10.0.26100\win-x64
+
+# Uno Desktop
+dotnet build -p:Platform=x64 -f net10.0-desktop -m:1
+Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 ```
+
+> [!NOTE]
+> `-m:1` (single-process build) is required to work around an intermittent `MSB4018` from Uno's `EmbeddedResourceInjectorTask` under multi-proc MSBuild on the .NET 10 preview SDK. Both scripts apply this automatically.
 
 ## Usage
 

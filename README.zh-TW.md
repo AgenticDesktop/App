@@ -2,7 +2,7 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | 繁體中文 | [日本語](README.ja.md)
 
-一個基於 WinUI 3 的 ACP（Agent Communication Protocol）桌面客戶端，提供與 AI Agent 互動的聊天介面。
+一個基於 WinUI 3 + Uno Platform 的 ACP（Agent Communication Protocol）桌面客戶端。同一份程式碼庫面向兩個框架：原生 **WinUI 3** 建置（MSIX 封裝、Mica 背景）和跨平台 **Uno Desktop / Skia** 建置（直接執行 exe、無需封裝）。
 
 ## 功能特色
 
@@ -12,6 +12,7 @@
 - **權限管理** — Agent 請求檔案/終端機權限時彈出互動式確認對話方塊
 - **終端機管理** — 支援 Agent 發起的終端機命令執行
 - **Fluent Design** — Mica 背景、壓克力材質、自適應主題
+- **雙目標** — 單份 XAML 程式碼庫同時產出原生 WinUI 3 應用程式與 Uno Skia 桌面應用程式
 
 ## 技術堆疊
 
@@ -19,26 +20,56 @@
 | ------ | ------ |
 | .NET | 10.0 |
 | Windows App SDK | 2.3.1 |
+| Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-beta.3 |
+| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
 
 ## 系統需求
 
 - Windows 10 1809 (Build 17763) 及以上
 - [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [WinApp CLI](https://learn.microsoft.com/windows/apps/windows-app-sdk/) (`dotnet tool install -g winapp`)
-- 開啟 **開發人員模式**（設定 > 系統 > 開發人員選項）
+- 開啟 **開發人員模式**（設定 > 系統 > 開發人員選項）— 僅 WinUI / MSIX 目標需要
 
 ## 快速開始
 
-```plaintext
-# 複製儲存庫
+倉庫附帶兩個便利腳本（以及通用的 `BuildAndRun.ps1`）：
+
+| 腳本 | 目標 | 啟動方式 | 需要開發人員模式 |
+| ------ | ------ | ------ | -------------- |
+| `winui.ps1` | `net10.0-windows10.0.26100`（WinUI 3，MSIX） | `winapp run` | 是 |
+| `uno.ps1` | `net10.0-desktop`（Uno / Skia，直接 exe） | 直接執行 `.exe` | 否 |
+
+```powershell
+# WinUI 3 建置（封裝、原生）
+.\winui.ps1                  # 建置 + 前景執行
+.\winui.ps1 -Detach          # 建置 + 背景啟動
+.\winui.ps1 -SkipRun         # 僅建置
+
+# Uno Desktop 建置（Skia，直接 exe）
+.\uno.ps1                    # 建置 + 前景執行
+.\uno.ps1 -Detach            # 建置 + 背景啟動
+.\uno.ps1 -SkipRun           # 僅建置
+```
+
+手動建置（不使用腳本）：
+
+```powershell
 git clone https://github.com/AgenticDesktop/App.git
 cd App
-dotnet build -p:Platform=x64
-winapp run bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64
+
+# WinUI 3
+dotnet build -p:Platform=x64 -f net10.0-windows10.0.26100 -m:1
+winapp run Agentic.Desktop\bin\x64\Debug\net10.0-windows10.0.26100\win-x64
+
+# Uno Desktop
+dotnet build -p:Platform=x64 -f net10.0-desktop -m:1
+Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 ```
+
+> [!NOTE]
+> `-m:1`（單進程建置）是必需的，用於規避 .NET 10 preview SDK 上 Uno `EmbeddedResourceInjectorTask` 在多進程 MSBuild 下偶發的 `MSB4018` 錯誤。兩個腳本會自動套用此設定。
 
 ## 使用說明
 
