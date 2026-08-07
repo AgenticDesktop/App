@@ -2,46 +2,62 @@
 
 <cite>
 **Referenced Files in This Document**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainWindow.xaml](file://Agentic.Desktop/MainWindow.xaml)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [MainPage.xaml](file://Agentic.Desktop/MainPage.xaml)
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [ChatListViewModel.cs](file://Agentic.Desktop/ViewModels/ChatListViewModel.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
-- [ChatMessage.cs](file://Agentic.Desktop/ViewModels/Messages/ChatMessage.cs)
-- [ChatSession.cs](file://Agentic.Desktop/ViewModels/Messages/ChatSession.cs)
+- [Agentic.Desktop.csproj](file://Agentic.Desktop/Agentic.Desktop/Agentic.Desktop.csproj)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatListViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatListViewModel.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [ChatMessage.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/Messages/ChatMessage.cs)
+- [ChatSession.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/Messages/ChatSession.cs)
+- [global.json](file://Agentic.Desktop/global.json)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated project structure section to reflect Uno.Sdk migration and cross-platform support
+- Added new Platform Abstraction Layer section documenting the Uno-based architecture
+- Updated build configuration section with conditional compilation symbols and target frameworks
+- Enhanced cross-platform considerations throughout the document
+- Added platform-specific implementation details for Windows vs desktop targets
 
 ## Table of Contents
 1. Introduction
 2. Project Structure
-3. Core Components
-4. Architecture Overview
-5. Detailed Component Analysis
-6. Dependency Analysis
-7. Performance Considerations
-8. Troubleshooting Guide
-9. Conclusion
+3. Platform Abstraction Layer
+4. Core Components
+5. Architecture Overview
+6. Detailed Component Analysis
+7. Dependency Analysis
+8. Performance Considerations
+9. Troubleshooting Guide
+10. Conclusion
 
 ## Introduction
-This document explains the MVVM-based architecture of Agentic.Desktop, focusing on how the WinUI UI layer, CommunityToolkit.Mvvm ViewModels, and the AcpClient communication layer collaborate to deliver a responsive chat experience with external agents. It covers navigation, chat flow, transport abstraction (stdio vs mock), cross-cutting concerns (permissions, terminal management, file system security), event-driven patterns, and the singleton SettingsViewModel that manages global connection state.
+This document explains the MVVM-based architecture of Agentic.Desktop, now built on Uno.Sdk for cross-platform support. The application maintains its WinUI 3 UI layer while adding a platform abstraction layer that enables deployment across Windows (WinAppSDK), Linux (Skia), and macOS platforms. CommunityToolkit.Mvvm ViewModels coordinate business logic, while the AcpClient communication layer provides agent interaction through IAgentTransport abstraction. The architecture supports conditional compilation for Windows-specific features while maintaining cross-platform compatibility.
 
 ## Project Structure
-The application follows a clear separation:
-- UI Layer (WinUI 3): MainWindow hosts navigation; MainPage renders the chat interface; SettingsPage configures connections.
-- ViewModels: ChatViewModel orchestrates chat logic; ChatListViewModel manages sessions; SettingsViewModel is a singleton for connection lifecycle and global state.
-- Services: TerminalManager implements ITerminalHandler; DesktopPermissionHandler implements IPermissionHandler; DesktopFileSystemHandler implements IFileSystemHandler.
-- Transport Abstraction: MockAgentTransport provides a mock IAgentTransport for development; StdioAgentTransport is used when an agent path is configured.
+The application follows a clear separation with Uno.Sdk enabling multi-targeting:
+- **UI Layer (WinUI 3)**: MainWindow hosts navigation; MainPage renders the chat interface; SettingsPage configures connections.
+- **Platform Abstraction**: Uno.UI.Hosting manages platform-specific initialization for Windows, Linux, and macOS.
+- **ViewModels**: ChatViewModel orchestrates chat logic; ChatListViewModel manages sessions; SettingsViewModel is a singleton for connection lifecycle and global state.
+- **Services**: TerminalManager implements ITerminalHandler; DesktopPermissionHandler implements IPermissionHandler; DesktopFileSystemHandler implements IFileSystemHandler.
+- **Transport Abstraction**: MockAgentTransport provides a mock IAgentTransport for development; StdioAgentTransport is used when an agent path is configured.
 
 ```mermaid
 graph TB
-subgraph "UI Layer"
+subgraph "Uno Platform Layer"
+UNO["Uno.UI.Hosting"]
+HOST["UnoPlatformHostBuilder"]
+end
+subgraph "UI Layer (WinUI 3)"
 MW["MainWindow.xaml.cs"]
 MP["MainPage.xaml.cs"]
 SP["SettingsPage.xaml.cs"]
@@ -60,6 +76,8 @@ subgraph "Transport & Client"
 MAT["MockAgentTransport.cs"]
 ACP["AcpClient (external library)"]
 end
+UNO --> HOST
+HOST --> MW
 MW --> MP
 MW --> SP
 MP --> CVM
@@ -74,52 +92,94 @@ SVM --> MAT
 ```
 
 **Diagram sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [SettingsPage.xaml.cs](file://Agentic.Desktop/SettingsPage.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [ChatListViewModel.cs](file://Agentic.Desktop/ViewModels/ChatListViewModel.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatListViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatListViewModel.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
 
 **Section sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainWindow.xaml](file://Agentic.Desktop/MainWindow.xaml)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [MainPage.xaml](file://Agentic.Desktop/MainPage.xaml)
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
+- [Agentic.Desktop.csproj](file://Agentic.Desktop/Agentic.Desktop/Agentic.Desktop.csproj)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+
+## Platform Abstraction Layer
+The Uno.Sdk migration introduces a robust platform abstraction layer that enables cross-platform deployment:
+
+### Multi-Target Framework Support
+- **Windows Target**: `net10.0-windows10.0.26100` uses WinAppSDK with XAML-generated Main entry point
+- **Desktop Target**: `net10.0-desktop` uses Uno.UI.Hosting with Skia rendering for Linux/macOS
+- **Conditional Compilation**: `WINDOWS` symbol defined for Windows-specific features like Mica backdrop and file pickers
+
+### Platform-Specific Entry Points
+- **Windows**: Uses XAML-generated Main from App.xaml.cs with WinAppSDK initialization
+- **Cross-Platform**: Program.cs in Platforms/Desktop provides UnoPlatformHostBuilder setup for non-Windows targets
+
+### Build Configuration
+- Uno.Sdk version 6.6.29 managed via global.json
+- Conditional package references for Windows-only dependencies
+- Automatic removal of conflicting Uno packages on Windows builds
+- Custom MSBuild targets to handle platform-specific requirements
+
+```mermaid
+flowchart TD
+BUILD["MSBuild Process"] --> TARGET{"Target Framework"}
+TARGET --> |Windows| WINXAML["XAML Generated Main<br/>WinAppSDK Initialization"]
+TARGET --> |Desktop| UNOHOST["UnoPlatformHostBuilder<br/>Skia Rendering"]
+WINXAML --> APPXAML["App.xaml.cs<br/>OnLaunched()"]
+UNOHOST --> PROGRAM["Program.cs<br/>Main()"]
+APPXAML --> WINDOW["MainWindow Creation"]
+PROGRAM --> WINDOW
+WINDOW --> NAVIGATION["NavigationView<br/>Page Navigation"]
+```
+
+**Diagram sources**
+- [Agentic.Desktop.csproj](file://Agentic.Desktop/Agentic.Desktop/Agentic.Desktop.csproj)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
+
+**Section sources**
+- [Agentic.Desktop.csproj](file://Agentic.Desktop/Agentic.Desktop/Agentic.Desktop.csproj)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
+- [global.json](file://Agentic.Desktop/global.json)
 
 ## Core Components
-- MainWindow: Hosts NavigationView and RootFrame; updates title bar connection status; navigates between Chat and Settings pages.
-- MainPage: Binds ChatListPanel to ChatListViewModel; subscribes to ViewModel events; binds AcpClient from App; handles user input and scroll behavior.
-- SettingsPage: Uses SettingsViewModel.Shared; wires permission and file system handlers; updates window status and global AcpClient.
-- SettingsViewModel (singleton): Manages connection lifecycle, creates AcpClient via selected transport, initializes session, sets TerminalManager and PermissionHandler, exposes OnAgentConnected/OnAgentDisconnected.
-- ChatViewModel: Manages messages, streaming updates, cancellation, and delegates prompt sending to AcpClient or simulates locally if no client.
-- ChatListViewModel: Maintains sessions and selection; raises SessionChanged to update active message list.
-- Services: TerminalManager (process orchestration), DesktopPermissionHandler (UI dialog bridge), DesktopFileSystemHandler (sandboxed file access).
-- Transport: MockAgentTransport emulates JSON-RPC over stdio for development; real usage uses StdioAgentTransport.
+- **MainWindow**: Hosts NavigationView and RootFrame; updates title bar connection status; navigates between Chat and Settings pages with Windows-specific Mica backdrop support.
+- **MainPage**: Binds ChatListPanel to ChatListViewModel; subscribes to ViewModel events; binds AcpClient from App; handles user input and scroll behavior.
+- **SettingsPage**: Uses SettingsViewModel.Shared; wires permission and file system handlers; updates window status and global AcpClient with conditional file picker initialization.
+- **SettingsViewModel (singleton)**: Manages connection lifecycle, creates AcpClient via selected transport, initializes session, sets TerminalManager and PermissionHandler, exposes OnAgentConnected/OnAgentDisconnected.
+- **ChatViewModel**: Manages messages, streaming updates, cancellation, and delegates prompt sending to AcpClient or simulates locally if no client.
+- **ChatListViewModel**: Maintains sessions and selection; raises SessionChanged to update active message list.
+- **Services**: TerminalManager (process orchestration with cross-platform shell detection), DesktopPermissionHandler (UI dialog bridge), DesktopFileSystemHandler (sandboxed file access).
+- **Transport**: MockAgentTransport emulates JSON-RPC over stdio for development; real usage uses StdioAgentTransport.
 
 **Section sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [SettingsPage.xaml.cs](file://Agentic.Desktop/SettingsPage.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [ChatListViewModel.cs](file://Agentic.Desktop/ViewModels/ChatListViewModel.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatListViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatListViewModel.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
 
 ## Architecture Overview
-The application follows MVVM with event-driven interactions:
+The application follows MVVM with event-driven interactions enhanced by Uno.Sdk's cross-platform capabilities:
 - User actions in WinUI trigger commands in ViewModels.
 - ViewModels coordinate with AcpClient for agent communication.
 - AcpClient uses IAgentTransport (Stdio or Mock) and integrates with services for permissions, terminals, and file system.
 - Global state is centralized via App and SettingsViewModel.Shared.
+- Platform abstraction ensures consistent behavior across Windows, Linux, and macOS.
 
 ```mermaid
 sequenceDiagram
@@ -146,11 +206,11 @@ Note over SV,APP : Connection lifecycle managed by SettingsViewModel<br/>and exp
 ```
 
 **Diagram sources**
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
 
 ## Detailed Component Analysis
 
@@ -160,6 +220,7 @@ Note over SV,APP : Connection lifecycle managed by SettingsViewModel<br/>and exp
 - Handles back requests and pane toggle.
 - Navigates RootFrame to MainPage or SettingsPage based on NavigationViewItem tags.
 - Provides NavigateToSettings for programmatic navigation.
+- **Updated**: Includes Windows-specific Mica backdrop support via conditional compilation.
 
 ```mermaid
 flowchart TD
@@ -177,12 +238,10 @@ GoBack --> End
 ```
 
 **Diagram sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainWindow.xaml](file://Agentic.Desktop/MainWindow.xaml)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
 
 **Section sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainWindow.xaml](file://Agentic.Desktop/MainWindow.xaml)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
 
 ### MainPage: Chat Interface and Client Binding
 - Creates ChatViewModel instance and binds ChatListPanel.ViewModel.
@@ -209,13 +268,12 @@ VM-->>MP : ScrollToBottom event
 ```
 
 **Diagram sources**
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
 
 **Section sources**
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [MainPage.xaml](file://Agentic.Desktop/MainPage.xaml)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
 
 ### SettingsPage: Connection Setup and Cross-Cutting Handlers
 - Uses SettingsViewModel.Shared to persist connection state across page recreation.
@@ -224,6 +282,7 @@ VM-->>MP : ScrollToBottom event
   - Sets AcpClient.PermissionHandler and FileSystemHandler.
   - Updates MainWindow connection status and stores AcpClient globally via App.SetAcpClient.
 - On disconnect: resets UI state and clears global AcpClient.
+- **Updated**: Includes conditional file picker initialization for Windows platform.
 
 ```mermaid
 sequenceDiagram
@@ -246,15 +305,15 @@ SP->>APP : SetAcpClient(null)
 ```
 
 **Diagram sources**
-- [SettingsPage.xaml.cs](file://Agentic.Desktop/SettingsPage.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
 
 **Section sources**
-- [SettingsPage.xaml.cs](file://Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
 
 ### SettingsViewModel: Singleton Global State and Lifecycle
 - Shared singleton ensures connection state persists across page navigation.
@@ -307,12 +366,12 @@ SettingsViewModel --> MockAgentTransport : "uses when AgentPath empty"
 ```
 
 **Diagram sources**
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
 
 **Section sources**
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
 
 ### ChatViewModel: Business Logic and Streaming
 - Manages input text, streaming state, and current agent message.
@@ -338,13 +397,13 @@ Finally --> End
 ```
 
 **Diagram sources**
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
 
 **Section sources**
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [ChatListViewModel.cs](file://Agentic.Desktop/ViewModels/ChatListViewModel.cs)
-- [ChatMessage.cs](file://Agentic.Desktop/ViewModels/Messages/ChatMessage.cs)
-- [ChatSession.cs](file://Agentic.Desktop/ViewModels/Messages/ChatSession.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatListViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatListViewModel.cs)
+- [ChatMessage.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/Messages/ChatMessage.cs)
+- [ChatSession.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/Messages/ChatSession.cs)
 
 ### IAgentTransport Abstraction: Stdio and Mock
 - IAgentTransport defines StartAsync, SendAsync, StopAsync, and events for messaging and faults.
@@ -376,16 +435,17 @@ IAgentTransport <|.. MockAgentTransport
 ```
 
 **Diagram sources**
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
 
 **Section sources**
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
 
 ### Cross-Cutting Concerns: Permissions, Terminals, File System Security
 - DesktopPermissionHandler bridges IPermissionHandler to UI dialogs; dispatches to UI thread and awaits user decision.
 - TerminalManager implements ITerminalHandler, managing multiple shell processes, reading stdout/stderr asynchronously, and providing lifecycle methods.
 - DesktopFileSystemHandler enforces sandboxed file access within the configured working directory, throwing UnauthorizedAccessException for out-of-scope paths.
+- **Updated**: TerminalManager includes cross-platform shell detection using OperatingSystem.IsWindows().
 
 ```mermaid
 sequenceDiagram
@@ -407,20 +467,21 @@ end
 ```
 
 **Diagram sources**
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
 
 **Section sources**
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
 
 ## Dependency Analysis
-Key dependencies and relationships:
+Key dependencies and relationships with Uno.Sdk platform abstraction:
 - UI layers depend on ViewModels through data binding and command invocation.
 - ViewModels depend on AcpClient for agent communication and on services for cross-cutting features.
 - SettingsViewModel centralizes transport selection and lifecycle, exposing global state via App.
 - Services implement interfaces expected by AcpClient, ensuring loose coupling and testability.
+- Uno.Platform provides cross-platform abstractions for UI hosting and platform-specific features.
 
 ```mermaid
 graph LR
@@ -435,30 +496,33 @@ AC --> TM["TerminalManager.cs"]
 AC --> PH["PermissionHandler.cs"]
 AC --> FSH["FileSystemHandler.cs"]
 SVM --> MAT["MockAgentTransport.cs"]
+UNO["Uno.UI.Hosting"] --> MW
+UNO --> MP
+UNO --> SP
 ```
 
 **Diagram sources**
-- [MainWindow.xaml.cs](file://Agentic.Desktop/MainWindow.xaml.cs)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [SettingsPage.xaml.cs](file://Agentic.Desktop/SettingsPage.xaml.cs)
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
-- [ChatListViewModel.cs](file://Agentic.Desktop/ViewModels/ChatListViewModel.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [MockAgentTransport.cs](file://Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [MainWindow.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainWindow.xaml.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [SettingsPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/SettingsPage.xaml.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [ChatViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatViewModel.cs)
+- [ChatListViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/ChatListViewModel.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [MockAgentTransport.cs](file://Agentic.Desktop/Agentic.Desktop/Mocks/MockAgentTransport.cs)
+- [Program.cs](file://Agentic.Desktop/Agentic.Desktop/Platforms/Desktop/Program.cs)
 
 **Section sources**
-- [App.xaml.cs](file://Agentic.Desktop/App.xaml.cs)
+- [App.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/App.xaml.cs)
 
 ## Performance Considerations
 - Streaming updates are batched in ChatViewModel to reduce UI churn during high-frequency agent_message_chunk events.
 - DispatcherQueue marshalling ensures UI updates occur on the correct thread.
 - TerminalManager reads stdout/stderr asynchronously to avoid blocking the UI thread.
 - MockAgentTransport introduces artificial delays to simulate realistic streaming behavior during development.
-
-[No sources needed since this section provides general guidance]
+- **Updated**: Uno.Platform optimizes UI rendering across different platforms while maintaining consistent performance characteristics.
 
 ## Troubleshooting Guide
 - Connection failures: Check SettingsViewModel.ConnectAsync exception handling and ensure AgentPath and arguments are valid.
@@ -466,15 +530,14 @@ SVM --> MAT["MockAgentTransport.cs"]
 - Permission dialogs not appearing: Ensure DesktopPermissionHandler.PermissionRequested is wired and dispatched to UI thread.
 - File access denied: Confirm DesktopFileSystemHandler.ValidatePath allows the requested path within the working directory.
 - Terminal output missing: Inspect TerminalManager's async readers and ensure processes are started correctly.
+- **Updated**: Cross-platform issues: Verify Uno.Platform initialization and check platform-specific feature availability using conditional compilation symbols.
 
 **Section sources**
-- [SettingsViewModel.cs](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs)
-- [MainPage.xaml.cs](file://Agentic.Desktop/MainPage.xaml.cs)
-- [PermissionHandler.cs](file://Agentic.Desktop/Services/PermissionHandler.cs)
-- [FileSystemHandler.cs](file://Agentic.Desktop/Services/FileSystemHandler.cs)
-- [TerminalManager.cs](file://Agentic.Desktop/Services/TerminalManager.cs)
+- [SettingsViewModel.cs](file://Agentic.Desktop/Agentic.Desktop/ViewModels/SettingsViewModel.cs)
+- [MainPage.xaml.cs](file://Agentic.Desktop/Agentic.Desktop/MainPage.xaml.cs)
+- [PermissionHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/PermissionHandler.cs)
+- [FileSystemHandler.cs](file://Agentic.Desktop/Agentic.Desktop/Services/FileSystemHandler.cs)
+- [TerminalManager.cs](file://Agentic.Desktop/Agentic.Desktop/Services/TerminalManager.cs)
 
 ## Conclusion
-Agentic.Desktop employs a robust MVVM architecture with clear separation of concerns: WinUI handles presentation, ViewModels encapsulate business logic, and AcpClient abstracts agent communication through IAgentTransport. Event-driven patterns enable reactive UI updates, while services provide secure and flexible cross-cutting capabilities. The singleton SettingsViewModel ensures consistent global state across navigation, and the transport abstraction supports both development-friendly mocking and production-grade stdio communication.
-
-[No sources needed since this section summarizes without analyzing specific files]
+Agentic.Desktop employs a robust MVVM architecture enhanced by Uno.Sdk's cross-platform capabilities. The architecture maintains clear separation of concerns: WinUI handles presentation, ViewModels encapsulate business logic, and AcpClient abstracts agent communication through IAgentTransport. Event-driven patterns enable reactive UI updates, while services provide secure and flexible cross-cutting capabilities. The singleton SettingsViewModel ensures consistent global state across navigation, and the transport abstraction supports both development-friendly mocking and production-grade stdio communication. The Uno.Sdk migration enables deployment across Windows, Linux, and macOS while preserving the original WinUI experience and functionality.

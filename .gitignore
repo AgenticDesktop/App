@@ -432,3 +432,5 @@ FodyWeavers.xsd
 BuildAndRun.ps1
 .qoder/*
 !.qoder/repowiki
+.freebuff
+.workbuddy

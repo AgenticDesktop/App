@@ -103,6 +103,9 @@
   <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>Cancel generation</value>
   </data>
+  <data name="InputHint.Text" xml:space="preserve">
+    <value>Enter to send, Shift + Enter for a new line</value>
+  </data>
 
   <!-- Settings Page (SettingsPage.xaml) -->
   <data name="SettingsAgentConfig.Text" xml:space="preserve">

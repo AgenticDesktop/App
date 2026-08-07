@@ -11,7 +11,18 @@
 - [ChatViewModel.cs](file://Agentic.Desktop/ViewModels/ChatViewModel.cs)
 - [PermissionDialog.xaml.cs](file://Agentic.Desktop/Views/PermissionDialog.xaml.cs)
 - [Resources.resw](file://Agentic.Desktop/Strings/en/Resources.resw)
+- [Resources.resw](file://Agentic.Desktop/Strings/zh-CN/Resources.resw)
+- [Resources.resw](file://Agentic.Desktop/Strings/zh-TW/Resources.resw)
+- [Resources.resw](file://Agentic.Desktop/Strings/ja/Resources.resw)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Enhanced LocalizationService documentation with comprehensive multi-language support details
+- Added detailed coverage of the four supported languages (English, Simplified Chinese, Traditional Chinese, Japanese)
+- Updated integration examples to show proper usage patterns for both Get() and Format() methods
+- Expanded resource file structure documentation with specific key categories
+- Enhanced troubleshooting section with localization-specific guidance
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -25,11 +36,11 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
-This document provides comprehensive API documentation for Agentic.Desktop’s service layer interfaces and implementations. It focuses on:
+This document provides comprehensive API documentation for Agentic.Desktop's service layer interfaces and implementations. It focuses on:
 - IPermissionHandler implementation for permission request handling with an event-driven architecture and UI thread marshaling.
 - ITerminalHandler implementation for concurrent terminal process management, unique IDs, and asynchronous output streaming.
 - IFileSystemHandler implementation for secure file operations with path validation and working directory isolation.
-- LocalizationService for multi-language support.
+- **Enhanced LocalizationService for comprehensive multi-language support across four languages.**
 - MarkdownHelper for content rendering (HTML and plain text).
 
 Each section includes parameter specifications, return values, error handling patterns, and integration examples.
@@ -39,12 +50,12 @@ The services reside under the Services folder and are consumed by ViewModels and
 - PermissionHandler.cs: DesktopPermissionHandler implements IPermissionHandler and raises events to show a UI dialog.
 - TerminalManager.cs: TerminalManager implements ITerminalHandler and manages multiple terminal processes concurrently.
 - FileSystemHandler.cs: DesktopFileSystemHandler implements IFileSystemHandler with strict path validation.
-- LocalizationService.cs: Static helper to load localized strings from .resw resources.
+- **LocalizationService.cs: Static helper to load localized strings from .resw resources with support for four languages.**
 - MarkdownHelper.cs: Utility to convert Markdown to HTML or plain text.
 - SettingsViewModel.cs: Wires up AcpClient, TerminalManager, and session lifecycle.
 - ChatViewModel.cs: Uses localization and orchestrates agent interactions.
 - PermissionDialog.xaml.cs: UI dialog that resolves permission outcomes.
-- Resources.resw: Localized string keys used across services.
+- **Resources.resw files: Localized string keys organized by language and functionality category.**
 
 ```mermaid
 graph TB
@@ -52,7 +63,7 @@ subgraph "Services"
 PH["DesktopPermissionHandler<br/>IPermissionHandler"]
 TM["TerminalManager<br/>ITerminalHandler"]
 FSH["DesktopFileSystemHandler<br/>IFileSystemHandler"]
-LS["LocalizationService"]
+LS["LocalizationService<br/>Multi-Language Support"]
 MH["MarkdownHelper"]
 end
 subgraph "UI Layer"
@@ -64,6 +75,7 @@ subgraph "External"
 ACP["AcpClient"]
 OS["OS Shell (cmd.exe /bin/sh)"]
 FS["File System"]
+RES["Resource Files (.resw)"]
 end
 PH --> PD
 TM --> OS
@@ -74,6 +86,7 @@ VM_Chat --> LS
 PH --> LS
 FSH --> LS
 MH --> LS
+LS --> RES
 ```
 
 **Diagram sources**
@@ -101,7 +114,7 @@ MH --> LS
 - IPermissionHandler (implemented by DesktopPermissionHandler): Handles permission requests via an event and returns a response asynchronously. Marshals UI updates to the UI thread using DispatcherQueue.
 - ITerminalHandler (implemented by TerminalManager): Creates and manages terminal processes, streams stdout/stderr asynchronously, supports unique IDs, waiting for exit, killing, and releasing terminals.
 - IFileSystemHandler (implemented by DesktopFileSystemHandler): Provides secure read/write text file operations with path validation against a configured working directory.
-- LocalizationService: Loads localized strings from .resw resources and formats them with parameters.
+- **LocalizationService: Comprehensive multi-language support with static ResourceLoader instance providing Get() and Format() methods for accessing localized strings from .resw resources across English, Simplified Chinese, Traditional Chinese, and Japanese.**
 - MarkdownHelper: Converts Markdown to HTML or plain text; uses Markdig pipeline for HTML conversion and regex-based stripping for plain text.
 
 **Section sources**
@@ -116,7 +129,7 @@ The service layer integrates tightly with the UI and external systems:
 - Permission flow: Agent requests permission → DesktopPermissionHandler raises PermissionRequested → ViewModel shows PermissionDialog → Dialog sets result → Handler completes Task.
 - Terminal flow: CreateTerminalAsync spawns shell process → Streams stdout/stderr into per-terminal buffers → Consumers poll GetOutputAsync or wait for exit.
 - File system flow: Read/Write methods validate paths against working directory → Throw UnauthorizedAccessException if outside bounds.
-- Localization: All user-facing messages use LocalizationService.Get/Format with resource keys defined in Resources.resw.
+- **Localization flow: All user-facing messages use LocalizationService.Get/Format with resource keys defined in Resources.resw files, automatically selecting appropriate language based on system culture.**
 - Markdown: Content rendered as HTML for WebView2 or stripped to plain text for TextBlock.
 
 ```mermaid
@@ -125,9 +138,12 @@ participant Agent as "Agent"
 participant Handler as "DesktopPermissionHandler"
 participant UI as "PermissionDialog"
 participant VM as "ViewModel"
+participant LS as "LocalizationService"
 Agent->>Handler : HandlePermissionRequestAsync(request)
 Handler->>VM : Raise PermissionRequested(args)
 VM->>UI : Show dialog with request details
+VM->>LS : Get localized strings
+LS-->>VM : Return localized text
 UI-->>VM : User selects option or cancels
 VM->>Handler : OnComplete(response)
 Handler-->>Agent : Return RequestPermissionResponse
@@ -136,6 +152,7 @@ Handler-->>Agent : Return RequestPermissionResponse
 **Diagram sources**
 - [PermissionHandler.cs:26-44](file://Agentic.Desktop/Services/PermissionHandler.cs#L26-L44)
 - [PermissionDialog.xaml.cs:15-50](file://Agentic.Desktop/Views/PermissionDialog.xaml.cs#L15-L50)
+- [LocalizationService.cs:15-21](file://Agentic.Desktop/Services/LocalizationService.cs#L15-L21)
 
 ## Detailed Component Analysis
 
@@ -284,31 +301,81 @@ Write --> Done(["Return Task Completed"])
 - [FileSystemHandler.cs:8-41](file://Agentic.Desktop/Services/FileSystemHandler.cs#L8-L41)
 
 ### LocalizationService
+**Updated** Comprehensive multi-language localization system supporting four languages with efficient resource loading and formatting capabilities.
+
 Purpose:
-- Centralizes access to localized strings from .resw resources.
-- Supports formatting with parameters.
+- Centralizes access to localized strings from .resw resource files across multiple languages.
+- Provides efficient caching through static ResourceLoader instance.
+- Supports both simple string retrieval and parameterized string formatting.
+
+Supported Languages:
+- **English (en)**: Default language with complete resource coverage
+- **Simplified Chinese (zh-CN)**: Full translation support for all UI elements
+- **Traditional Chinese (zh-TW)**: Complete localization for traditional Chinese users
+- **Japanese (ja)**: Comprehensive Japanese translations
 
 Key behaviors:
-- Get(key): Retrieves localized string by key.
-- Format(key, params object[]): Formats localized string with provided arguments.
+- Get(key): Retrieves localized string by key using Windows.ApplicationModel.Resources.ResourceLoader.
+- Format(key, params object[]): Formats localized string with provided arguments using standard string formatting.
 
 Parameters:
-- key: Resource key name.
-- args: Formatting arguments.
+- key: Resource key name (e.g., "StatusNotConnected", "AccessDeniedMessage", "StderrPrefix").
+- args: Formatting arguments for parameterized strings (e.g., error messages, status updates).
 
 Return values:
-- Get returns string.
-- Format returns formatted string.
+- Get returns string with localized content.
+- Format returns formatted string with parameters applied.
+
+Resource Key Categories:
+- **Navigation**: NavChat.Content, NavSettings.Content, StatusText.Text
+- **Status Messages**: StatusDisconnected, StatusConnecting, StatusConnected, StatusNotConnected
+- **Chat Interface**: TypingIndicator.Text, ConnectHint.Text, InputTextBox.PlaceholderText
+- **Settings Page**: SettingsAgentConfig.Text, SettingsAgentPathLabel.Text, SettingsWorkDirLabel.Text
+- **Permission Dialog**: PermissionDialog.Title, PermissionDialog.PrimaryButtonText, PermissionDialog.CloseButtonText
+- **Error Handling**: AccessDeniedMessage, ErrorPrefix, ToolCallPrefix
+- **Mock Responses**: MockResponse1, MockResponse2, MockResponse3
 
 Error handling:
-- Missing keys may throw exceptions depending on ResourceLoader behavior; ensure keys exist in Resources.resw.
+- Missing keys may throw exceptions depending on ResourceLoader behavior; ensure keys exist in all Resources.resw files.
+- Parameter formatting errors follow standard string.Format exception behavior.
 
-Integration example:
-- Used across services for consistent user-facing messages (e.g., AccessDeniedMessage, StderrPrefix).
+Integration examples:
+- Used across services for consistent user-facing messages (e.g., AccessDeniedMessage, StderrPrefix, StatusNotConnected).
+- SettingsViewModel initializes connection status with LocalizationService.Get("StatusNotConnected").
+- ChatViewModel formats error messages with LocalizationService.Format("ErrorPrefix", ex.Message).
+- TerminalManager prefixes stderr output with LocalizationService.Get("StderrPrefix").
+
+```mermaid
+classDiagram
+class LocalizationService {
++static ResourceLoader _loader
++Get(key) string
++Format(key, args) string
+}
+class ResourceLoader {
++GetString(key) string
+}
+class ResourcesResw {
++NavChat.Content
++StatusNotConnected
++AccessDeniedMessage
++StderrPrefix
++MockResponse1
+}
+LocalizationService --> ResourceLoader : "uses"
+ResourceLoader --> ResourcesResw : "loads from"
+```
+
+**Diagram sources**
+- [LocalizationService.cs:8-22](file://Agentic.Desktop/Services/LocalizationService.cs#L8-L22)
+- [Resources.resw:62-222](file://Agentic.Desktop/Strings/en/Resources.resw#L62-L222)
 
 **Section sources**
 - [LocalizationService.cs:8-22](file://Agentic.Desktop/Services/LocalizationService.cs#L8-L22)
 - [Resources.resw:214-221](file://Agentic.Desktop/Strings/en/Resources.resw#L214-L221)
+- [SettingsViewModel.cs:30](file://Agentic.Desktop/ViewModels/SettingsViewModel.cs#L30)
+- [ChatViewModel.cs:141](file://Agentic.Desktop/ViewModels/ChatViewModel.cs#L141)
+- [TerminalManager.cs:59](file://Agentic.Desktop/Services/TerminalManager.cs#L59)
 
 ### MarkdownHelper
 Purpose:
@@ -338,7 +405,7 @@ Integration example:
 - DesktopPermissionHandler depends on Microsoft.UI.Dispatching.DispatcherQueue for UI thread marshaling and on IPermissionHandler interface types from Agentic.ACPLibrary.Models.
 - TerminalManager depends on System.Diagnostics.Process and System.Collections.Concurrent for process management and thread-safe storage.
 - DesktopFileSystemHandler depends on System.IO for file operations and LocalizationService for error messages.
-- LocalizationService depends on Windows.ApplicationModel.Resources.ResourceLoader.
+- **LocalizationService depends on Windows.ApplicationModel.Resources.ResourceLoader for efficient resource loading across multiple languages.**
 - MarkdownHelper depends on Markdig library.
 - SettingsViewModel wires TerminalManager to AcpClient and manages lifecycle.
 
@@ -351,6 +418,7 @@ TM --> Conc["ConcurrentDictionary"]
 FSH["DesktopFileSystemHandler"] --> IO["System.IO"]
 FSH --> LS["LocalizationService"]
 LS --> Res["ResourceLoader"]
+LS --> RES["Multiple .resw Files"]
 MH["MarkdownHelper"] --> MD["Markdig"]
 VM_Settings["SettingsViewModel"] --> TM
 VM_Settings --> ACP["AcpClient"]
@@ -376,25 +444,25 @@ VM_Settings --> ACP["AcpClient"]
 - TerminalManager streams stdout/stderr asynchronously; avoid blocking calls while polling GetOutputAsync.
 - Use CancellationToken to cancel long-running operations where supported.
 - DesktopFileSystemHandler performs synchronous path validation before async I/O; keep working directory configuration stable.
-- LocalizationService accesses resources efficiently via a static ResourceLoader instance.
+- **LocalizationService uses a static ResourceLoader instance for efficient resource caching across the application lifetime.**
 - MarkdownHelper builds a reusable Markdig pipeline to avoid repeated initialization overhead.
-
-[No sources needed since this section provides general guidance]
+- **Resource files are loaded on-demand by the Windows runtime, minimizing initial application startup time.**
 
 ## Troubleshooting Guide
 Common issues and resolutions:
 - Permission dialog does not appear: Ensure ViewModel subscribes to PermissionRequested and displays PermissionDialog promptly.
 - Terminal output missing: Verify stdout/stderr redirection and check for OperationCanceledException during stream reading.
 - UnauthorizedAccessException on file operations: Confirm path resolves within the configured working directory.
-- Localization errors: Verify resource keys exist in Resources.resw and match exact casing.
+- **Localization errors: Verify resource keys exist in all Resources.resw files (en, zh-CN, zh-TW, ja) and match exact casing.**
+- **Missing translations: Check that all required keys are present in each language's Resources.resw file.**
+- **Parameter formatting issues: Ensure Format() method receives correct number and type of parameters matching the resource string format.**
 
 **Section sources**
 - [PermissionHandler.cs:26-44](file://Agentic.Desktop/Services/PermissionHandler.cs#L26-L44)
 - [TerminalManager.cs:39-64](file://Agentic.Desktop/Services/TerminalManager.cs#L39-L64)
 - [FileSystemHandler.cs:32-41](file://Agentic.Desktop/Services/FileSystemHandler.cs#L32-L41)
+- [LocalizationService.cs:15-21](file://Agentic.Desktop/Services/LocalizationService.cs#L15-L21)
 - [Resources.resw:214-221](file://Agentic.Desktop/Strings/en/Resources.resw#L214-L221)
 
 ## Conclusion
-Agentic.Desktop’s service layer provides robust, secure, and user-friendly abstractions for permissions, terminal management, file operations, localization, and Markdown rendering. By adhering to the documented APIs and integration patterns, developers can extend functionality while maintaining safety and usability.
-
-[No sources needed since this section summarizes without analyzing specific files]
+Agentic.Desktop's service layer provides robust, secure, and user-friendly abstractions for permissions, terminal management, file operations, **comprehensive multi-language localization**, and Markdown rendering. The enhanced LocalizationService enables seamless internationalization across four languages with efficient resource management. By adhering to the documented APIs and integration patterns, developers can extend functionality while maintaining safety, usability, and global accessibility.

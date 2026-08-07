@@ -103,6 +103,9 @@
   <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>生成をキャンセル</value>
   </data>
+  <data name="InputHint.Text" xml:space="preserve">
+    <value>Enter で送信、Shift + Enter で改行</value>
+  </data>
 
   <!-- Settings Page -->
   <data name="SettingsAgentConfig.Text" xml:space="preserve">

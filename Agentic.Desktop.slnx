@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="Agentic.Desktop/Agentic.Desktop.csproj">
-    <Platform Project="x86" />
-  </Project>
+  <Project Path="Agentic.Desktop/Agentic.Desktop.csproj"/>
+  <Project Path="Agentic.Desktop.Tests/Agentic.Desktop.Tests.csproj"/>
 </Solution>

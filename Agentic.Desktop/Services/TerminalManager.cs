@@ -136,6 +136,9 @@ public class TerminalManager : ITerminalHandler, IDisposable
 
 internal class TerminalInstance
 {
+    private const int MaxOutputLength = 100_000; // ~100KB
+    private const int TrimTarget = 75_000; // Keep last 75KB when trimming
+
     public Process Process { get; }
     private readonly StringBuilder _output = new();
     private readonly object _lock = new();
@@ -147,6 +150,12 @@ internal class TerminalInstance
         lock (_lock)
         {
             _output.Append(text);
+            // Trim from beginning if exceeding max length
+            if (_output.Length > MaxOutputLength)
+            {
+                var excess = _output.Length - TrimTarget;
+                _output.Remove(0, excess);
+            }
         }
     }
 

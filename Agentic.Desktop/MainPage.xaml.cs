@@ -54,10 +54,21 @@ public sealed partial class MainPage : Page
         }
     }
 
+    /// <summary>x:Bind helper: send is allowed only when connected and input is non-empty.</summary>
+    public static bool CanSend(bool isConnected, string text) =>
+        isConnected && !string.IsNullOrWhiteSpace(text);
+
     private void InputTextBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
     {
         if (e.Key == Windows.System.VirtualKey.Enter && !e.KeyStatus.WasKeyDown)
         {
+            // Multiline input: Shift+Enter inserts a newline, Enter alone sends.
+            var shiftDown = Microsoft.UI.Input.InputKeyboardSource
+                .GetKeyStateForCurrentThread(Windows.System.VirtualKey.Shift)
+                .HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down);
+            if (shiftDown)
+                return;
+
             e.Handled = true;
             if (ViewModel.SendMessageCommand.CanExecute(null))
                 ViewModel.SendMessageCommand.Execute(null);

@@ -103,6 +103,9 @@
   <data name="CancelButton.ToolTipService.ToolTip" xml:space="preserve">
     <value>取消生成</value>
   </data>
+  <data name="InputHint.Text" xml:space="preserve">
+    <value>Enter 发送，Shift + Enter 换行</value>
+  </data>
 
   <!-- Settings Page -->
   <data name="SettingsAgentConfig.Text" xml:space="preserve">
