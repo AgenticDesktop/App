@@ -79,7 +79,9 @@ public partial class SettingsViewModel : ObservableObject
             }
             else
             {
-                transport = new StdioAgentTransport(AgentPath, AgentArguments, WorkingDirectory);
+                // Resolve command name to full path (e.g., "npx" -> "C:\Program Files\nodejs\npx.cmd")
+                var resolvedPath = CommandResolver.ResolveCommand(AgentPath);
+                transport = new StdioAgentTransport(resolvedPath, AgentArguments, WorkingDirectory);
             }
 
             var dispatcher = new JsonRpcDispatcher();

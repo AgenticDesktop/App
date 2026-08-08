@@ -41,8 +41,8 @@
   <ItemGroup>
     <PackageReference Include="Markdig" Version="1.3.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
-    <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.1.0-nightly.1ad856d0d1c865d194a161c6481986a2260b4c50" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.10" />
+    <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.1.0-nightly.fb7fe5424775fc7c18ab99fff6dd000c1307c4ac" />
   </ItemGroup>
 
   <!-- Windows-only packages (override Uno.Sdk implicit WinAppSDK version) -->
