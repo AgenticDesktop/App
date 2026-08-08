@@ -1,9 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Agentic.ACPLibrary.Client;
-using Agentic.Desktop.Services;
 using Agentic.Desktop.ViewModels;
-using Agentic.Desktop.Views;
 
 namespace Agentic_Desktop;
 
@@ -16,43 +13,9 @@ public sealed partial class SettingsPage : Page
     {
         InitializeComponent();
 
-        // After connection, store AcpClient in App and notify ChatViewModel
-        ViewModel.OnAgentConnected = client =>
-        {
-            // Create permission handler and subscribe to events
-            var permHandler = new DesktopPermissionHandler(App.DispatcherQueue);
-            permHandler.PermissionRequested += async args =>
-            {
-                var dialog = new PermissionDialog(args.Request)
-                {
-                    XamlRoot = App.Window.Content.XamlRoot
-                };
-                await dialog.ShowAsync();
-                var result = await dialog.Result;
-                args.OnComplete(result);
-            };
-            client.PermissionHandler = permHandler;
+        // Shared connection handlers: attach UI handlers, publish AcpClient, update title bar
+        App.RegisterConnectionHandlers(ViewModel);
 
-            // Create file system handler
-            client.FileSystemHandler = new DesktopFileSystemHandler(ViewModel.WorkingDirectory);
-
-            // Update title bar connection status
-            UpdateConnectionStatus();
-
-            App.SetAcpClient(client);
-        };
-
-        // Update UI when Agent disconnects
-        ViewModel.OnAgentDisconnected = message =>
-        {
-            App.DispatcherQueue.TryEnqueue(() =>
-            {
-                ViewModel.ConnectionStatus = message;
-                ViewModel.IsConnected = false;
-                ViewModel.ConnectionState = 0;
-                App.SetAcpClient(null);
-            });
-        };
         // Listen for connection state changes (shared VM outlives the page; unsubscribe on unload to avoid duplicate subscriptions)
         ViewModel.PropertyChanged += OnViewModelPropertyChanged;
         Unloaded += (_, _) => ViewModel.PropertyChanged -= OnViewModelPropertyChanged;

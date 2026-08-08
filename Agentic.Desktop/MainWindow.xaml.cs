@@ -100,6 +100,9 @@ public sealed partial class MainWindow : Window
                 case "chat":
                     RootFrame.Navigate(typeof(MainPage));
                     break;
+                case "registry":
+                    RootFrame.Navigate(typeof(RegistryPage));
+                    break;
                 case "settings":
                     RootFrame.Navigate(typeof(SettingsPage));
                     break;
@@ -113,5 +116,13 @@ public sealed partial class MainWindow : Window
         RootNavView.SelectedItem = RootNavView.FooterMenuItems
             .OfType<NavigationViewItem>()
             .FirstOrDefault(i => i.Tag?.ToString() == "settings");
+    }
+
+    /// <summary>Navigates to the chat page.</summary>
+    public void NavigateToChat()
+    {
+        RootNavView.SelectedItem = RootNavView.MenuItems
+            .OfType<NavigationViewItem>()
+            .FirstOrDefault(i => i.Tag?.ToString() == "chat");
     }
 }

@@ -11,7 +11,7 @@
   <Identity
     Name="ShihaoShen.Agentic.Desktop"
     Publisher="CN=Shihao Shen"
-    Version="1.0.0.0" />
+    Version="0.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="11E010C2-1260-4086-AB11-CB71235F9979" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
@@ -59,6 +59,8 @@
   </Applications>
 
   <Capabilities>
+    <!-- Required to fetch the ACP registry index from the CDN -->
+    <Capability Name="internetClient" />
     <rescap:Capability Name="runFullTrust" />
     <systemai:Capability Name="systemAIModels"/>
   </Capabilities>

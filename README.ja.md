@@ -23,7 +23,7 @@ WinUI 3 + Uno Platform ベースの ACP（Agent Communication Protocol）デス�
 | Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
+| ShihaoShen.Agentic.ACPLibrary | 0.2.0 |
 
 ## システム要件
 
@@ -34,7 +34,21 @@ WinUI 3 + Uno Platform ベースの ACP（Agent Communication Protocol）デス�
 
 ## クイックスタート
 
-リポジトリには 2 つの便利スクリプト（および汎用の `BuildAndRun.ps1`）が同梱されています：
+> [!WARNING]
+> Linux、macOS などの非 Windows プラットフォームでは、Uno Desktop ビルドを含めて公式サポート対象外です。より良い体験のため、Windows（物理マシン、VMware、Parallel Desktop など）で開発することを推奨します。
+
+> [!IMPORTANT]
+> `ShihaoShen.Agentic.ACPLibrary` ライブラリと一緒にアプリを開発する場合、2 つのリポジトリを同じ親ディレクトリにクローンし、`Agentic.Desktop` プロジェクトが NuGet パッケージではなくローカル ライブラリ プロジェクトを参照するようにしてください。
+>
+> 次のように配置します：
+>
+> ```plaintext
+> AgenticDesktop-DevFolder/
+> ├── App/ (このリポジトリ)
+> └── ACPLibrary/ (ライブラリ リポジトリ)
+> ```
+
+リポジトリには 2 つの便利スクリプトがあります：
 
 | スクリプト | ターゲット | 起動方法 | 開発者モード |
 | ---------- | ---------- | -------- | ------------ |
@@ -49,7 +63,6 @@ WinUI 3 + Uno Platform ベースの ACP（Agent Communication Protocol）デス�
 
 # Uno Desktop ビルド（Skia、直接 exe）
 .\uno.ps1                    # ビルド + フォアグラウンド実行
-.\uno.ps1 -Detach            # ビルド + バックグラウンド起動
 .\uno.ps1 -SkipRun           # ビルドのみ
 ```
 
@@ -87,12 +100,19 @@ Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 App/
 ├── ViewModels/          # MVVM ビューモデル
 │   ├── ChatViewModel.cs         # チャットロジック、ストリーミングメッセージ処理
+│   ├── ChatListViewModel.cs     # チャットセッション一覧管理
 │   ├── SettingsViewModel.cs     # Agent 接続管理
-│   └── Messages/ChatMessage.cs  # メッセージモデル
-├── Views/               # ダイアログ
-│   └── PermissionDialog.xaml    # 権限確認ダイアログ
-├── Services/            # 基盤サービス
+│   └── Messages/
+│       ├── ChatMessage.cs       # メッセージモデル
+│       └── ChatSession.cs       # チャットセッションモデル
+├── Views/               # ダイアログとパネル
+│   ├── ChatListPanel.xaml       # チャットセッション一覧パネル
+│   ├── ChatListPanel.xaml.cs
+│   ├── PermissionDialog.xaml    # 権限確認ダイアログ
+│   └── PermissionDialog.xaml.cs
+├── Services/            # コアサービス
 │   ├── FileSystemHandler.cs     # ファイルシステム権限処理
+│   ├── LocalizationService.cs   # ローカライズ / i18n
 │   ├── PermissionHandler.cs     # 権限リクエスト UI ディスパッチ
 │   ├── TerminalManager.cs       # ターミナルセッション管理
 │   └── MarkdownHelper.cs        # Markdown レンダリング

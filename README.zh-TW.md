@@ -23,7 +23,7 @@
 | Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
+| ShihaoShen.Agentic.ACPLibrary | 0.2.0 |
 
 ## 系統需求
 
@@ -34,7 +34,21 @@
 
 ## 快速開始
 
-倉庫附帶兩個便利腳本（以及通用的 `BuildAndRun.ps1`）：
+> [!WARNING]
+> 在非 Windows 平台（Linux、macOS）上建置並不受官方支援，即使是 Uno Desktop 建置也是如此。為了獲得更好的體驗，建議使用 Windows（實體機、VMware、Parallel Desktop 等）進行開發。
+
+> [!IMPORTANT]
+> 如果你是在與 `ShihaoShen.Agentic.ACPLibrary` 程式庫一起開發應用，請確保將兩個儲存庫複製到同一個父目錄下，讓 `Agentic.Desktop` 專案能夠引用本機程式庫專案，而不是 NuGet 套件。
+>
+> 像這樣：
+>
+> ```plaintext
+> AgenticDesktop-DevFolder/
+> ├── App/ (目前的儲存庫)
+> └── ACPLibrary/ (程式庫儲存庫)
+> ```
+
+倉庫附帶兩個便利腳本：
 
 | 腳本 | 目標 | 啟動方式 | 需要開發人員模式 |
 | ------ | ------ | ------ | -------------- |
@@ -49,7 +63,6 @@
 
 # Uno Desktop 建置（Skia，直接 exe）
 .\uno.ps1                    # 建置 + 前景執行
-.\uno.ps1 -Detach            # 建置 + 背景啟動
 .\uno.ps1 -SkipRun           # 僅建置
 ```
 
@@ -76,7 +89,7 @@ Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 1. 啟動應用程式後進入 **設定** 頁面
 2. 設定 Agent：
    - **Agent 路徑** — 填寫 ACP Agent 執行檔路徑（留空使用內建 Mock Agent）
-   - **Agent 參數** — 可选的啟動參數
+   - **Agent 參數** — 可選的啟動參數
    - **工作目錄** — Agent 的工作目錄
 3. 點擊 **連線**，等待狀態變為「已連線」
 4. 切換到 **聊天** 頁面開始對話
@@ -87,12 +100,19 @@ Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 App/
 ├── ViewModels/          # MVVM 檢視模型
 │   ├── ChatViewModel.cs         # 聊天邏輯、串流訊息處理
+│   ├── ChatListViewModel.cs     # 聊天會話列表管理
 │   ├── SettingsViewModel.cs     # Agent 連線管理
-│   └── Messages/ChatMessage.cs  # 訊息模型
-├── Views/               # 對話方塊
-│   └── PermissionDialog.xaml    # 權限確認對話方塊
-├── Services/            # 基礎服務
+│   └── Messages/
+│       ├── ChatMessage.cs       # 訊息模型
+│       └── ChatSession.cs       # 聊天會話模型
+├── Views/               # 對話方塊和面板
+│   ├── ChatListPanel.xaml       # 聊天會話列表面板
+│   ├── ChatListPanel.xaml.cs
+│   ├── PermissionDialog.xaml    # 權限確認對話方塊
+│   └── PermissionDialog.xaml.cs
+├── Services/            # 核心服務
 │   ├── FileSystemHandler.cs     # 檔案系統權限處理
+│   ├── LocalizationService.cs   # 本地化 / i18n
 │   ├── PermissionHandler.cs     # 權限請求 UI 排程
 │   ├── TerminalManager.cs       # 終端機工作階段管理
 │   └── MarkdownHelper.cs        # Markdown 轉譯

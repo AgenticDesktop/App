@@ -6,6 +6,9 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Agentic.ACPLibrary.Client;
+using Agentic.Desktop.Services;
+using Agentic.Desktop.ViewModels;
+using Agentic.Desktop.Views;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -89,5 +92,60 @@ public partial class App : Application
     {
         CurrentAcpClient = client;
         AcpClientChanged?.Invoke(client);
+    }
+
+    /// <summary>
+    /// Attaches UI handlers (permission, file system) to a freshly connected AcpClient
+    /// and publishes it as the current client. Shared by the Settings page and the Registry page.
+    /// </summary>
+    public static void AttachAgentClient(IAcpClient client, string workingDirectory)
+    {
+        var permHandler = new DesktopPermissionHandler(DispatcherQueue);
+        permHandler.PermissionRequested += async args =>
+        {
+            var dialog = new PermissionDialog(args.Request)
+            {
+                XamlRoot = Window.Content.XamlRoot
+            };
+            await dialog.ShowAsync();
+            var result = await dialog.Result;
+            args.OnComplete(result);
+        };
+        client.PermissionHandler = permHandler;
+        client.FileSystemHandler = new DesktopFileSystemHandler(workingDirectory);
+        SetAcpClient(client);
+    }
+
+    /// <summary>
+    /// Wires the shared connection callbacks (agent connected / disconnected) onto the settings ViewModel.
+    /// Idempotent: called by every page that may trigger a connection, so the callbacks are complete
+    /// regardless of navigation order.
+    /// </summary>
+    public static void RegisterConnectionHandlers(SettingsViewModel vm)
+    {
+        vm.OnAgentConnected = client =>
+        {
+            AttachAgentClient(client, vm.WorkingDirectory);
+            UpdateWindowStatus(vm);
+        };
+        vm.OnAgentDisconnected = message =>
+        {
+            DispatcherQueue.TryEnqueue(() =>
+            {
+                vm.ConnectionStatus = message;
+                vm.IsConnected = false;
+                vm.ConnectionState = 0;
+                SetAcpClient(null);
+            });
+        };
+    }
+
+    /// <summary>Refreshes the title-bar connection indicator from the shared settings ViewModel.</summary>
+    public static void UpdateWindowStatus(SettingsViewModel vm)
+    {
+        if (Window is MainWindow mainWindow)
+        {
+            mainWindow.UpdateConnectionStatus(vm.ConnectionState, vm.ConnectionState == 2 ? vm.AgentName : null);
+        }
     }
 }

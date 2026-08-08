@@ -23,7 +23,7 @@ An ACP (Agent Communication Protocol) desktop client built on WinUI 3 + Uno Plat
 | Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
+| ShihaoShen.Agentic.ACPLibrary | 0.2.0 |
 
 ## System Requirements
 
@@ -34,7 +34,21 @@ An ACP (Agent Communication Protocol) desktop client built on WinUI 3 + Uno Plat
 
 ## Quick Start
 
-The repo ships two convenience scripts (alongside the general-purpose `BuildAndRun.ps1`):
+> [!WARNING]
+> Building on non-Windows platforms (Linux, macOS) is not officially supported, even for the Uno Desktop build. For better experience, use Windows (Physical Machine, VMware, Parallel Desktop, etc.) instead.
+
+> [!IMPORTANT]
+> If you are developing the app alongside the `ShihaoShen.Agentic.ACPLibrary` library, make sure to clone both repos into the same parent folder so that the `Agentic.Desktop` project can reference the local library project instead of the NuGet package.
+>
+> Like this:
+>
+> ```plaintext
+> AgenticDesktop-DevFolder/
+> ├── App/ (This repo)
+> └── ACPLibrary/ (The library repo)
+> ```
+
+The repo ships two convenience scripts:
 
 | Script | Target | Launch | Needs Dev Mode |
 | ------ | ------ | ------ | -------------- |
@@ -48,8 +62,7 @@ The repo ships two convenience scripts (alongside the general-purpose `BuildAndR
 .\winui.ps1 -SkipRun         # build only
 
 # Uno Desktop build (Skia, direct exe)
-.\uno.ps1                    # build + run (foreground)
-.\uno.ps1 -Detach            # build + launch in background
+.\uno.ps1                    # build + run
 .\uno.ps1 -SkipRun           # build only
 ```
 

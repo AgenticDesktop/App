@@ -66,6 +66,9 @@
   <data name="NavSettings.Content" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="NavRegistry.Content" xml:space="preserve">
+    <value>Registry</value>
+  </data>
   <data name="StatusText.Text" xml:space="preserve">
     <value>Disconnected</value>
   </data>
@@ -221,5 +224,65 @@
   <!-- C# Code Strings (TerminalManager.cs) -->
   <data name="StderrPrefix" xml:space="preserve">
     <value>[stderr] </value>
+  </data>
+  <!-- Registry Page (RegistryPage.xaml) -->
+  <data name="RegistryRefresh.Content" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="RegistryLaunch.Content" xml:space="preserve">
+    <value>Launch</value>
+  </data>
+  <data name="RegistryInstalledBadge.Text" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="RegistryNotInstalled.Text" xml:space="preserve">
+    <value>Not installed locally</value>
+  </data>
+  <data name="RegistryNoSelection.Text" xml:space="preserve">
+    <value>Select an agent to view details</value>
+  </data>
+  <data name="RegistryUpdateAvailable.Text" xml:space="preserve">
+    <value>An update is available</value>
+  </data>
+  <data name="RegistryRepositoryLabel.Text" xml:space="preserve">
+    <value>Repository</value>
+  </data>
+  <data name="RegistryWebsiteLabel.Text" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="RegistryAuthorsLabel.Text" xml:space="preserve">
+    <value>Authors</value>
+  </data>
+  <data name="RegistryLicenseLabel.Text" xml:space="preserve">
+    <value>License</value>
+  </data>
+
+  <!-- C# Code Strings (RegistryViewModel.cs + RegistryAgentItem.cs) -->
+  <data name="RegistryStatusLoading" xml:space="preserve">
+    <value>Loading registry...</value>
+  </data>
+  <data name="RegistryStatusLoaded" xml:space="preserve">
+    <value>Loaded {0} agents</value>
+  </data>
+  <data name="RegistryStatusEmpty" xml:space="preserve">
+    <value>No agents found</value>
+  </data>
+  <data name="RegistryStatusError" xml:space="preserve">
+    <value>Failed to load registry: {0}</value>
+  </data>
+  <data name="RegistryLaunching" xml:space="preserve">
+    <value>Launching {0}...</value>
+  </data>
+  <data name="RegistryLaunchSuccess" xml:space="preserve">
+    <value>Launched {0}</value>
+  </data>
+  <data name="RegistryLaunchFailed" xml:space="preserve">
+    <value>Launch failed: {0}</value>
+  </data>
+  <data name="RegistryNpmBadge" xml:space="preserve">
+    <value>npm</value>
+  </data>
+  <data name="RegistryUvxBadge" xml:space="preserve">
+    <value>uvx</value>
   </data>
 </root>

@@ -51,18 +51,11 @@ if (-not $devMode) {
     exit 1
 }
 
-# -- 1. Find csproj --
-if (-not $Project) {
-    $csprojFiles = Get-ChildItem -Path . -Filter "*.csproj" -Depth 0
-    if ($csprojFiles.Count -eq 1) {
-        $Project = $csprojFiles[0].Name
-    } elseif ($csprojFiles.Count -gt 1) {
-        Write-Error "Multiple .csproj files found. Specify: .\winui.ps1 <name>.csproj"
-        exit 1
-    } else {
-        Write-Error "No .csproj file found in current directory."
-        exit 1
-    }
+# -- 1. Set project path --
+$Project = "Agentic.Desktop\Agentic.Desktop.csproj"
+if (-not (Test-Path $Project)) {
+    Write-Error "Project not found: $Project"
+    exit 1
 }
 
 # -- 2. Detect Windows TFM from csproj --

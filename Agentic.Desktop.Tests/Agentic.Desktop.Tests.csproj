@@ -4,11 +4,15 @@
     <TargetFramework>net10.0-windows10.0.26100</TargetFramework>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <!-- Align processor architecture with the WinUI 3 app project (AMD64 output) -->
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <!-- Disable MSIX/PRI tooling that flows transitively from the main project -->
     <EnableMsixTooling>false</EnableMsixTooling>
     <DisableMsixProjectCapabilityAddedByProject>true</DisableMsixProjectCapabilityAddedByProject>
     <DisableHasPackageAndPublishMenuAddedByProject>true</DisableHasPackageAndPublishMenuAddedByProject>
     <AppxGeneratePriEnabled>false</AppxGeneratePriEnabled>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <ItemGroup>

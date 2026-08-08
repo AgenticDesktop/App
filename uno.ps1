@@ -9,14 +9,12 @@ executable directly (no MSIX packaging, no Developer Mode required).
 .EXAMPLE
 .\uno.ps1                    # Build + run (foreground)
 .\uno.ps1 -SkipRun           # Build only
-.\uno.ps1 -Detach            # Build + launch in background (returns immediately)
 .\uno.ps1 /p:Configuration=Release
 #>
 param(
     [Parameter(Position = 0)]
     [string]$Project,
     [switch]$SkipRun,
-    [switch]$Detach,
     [switch]$UseMSBuild,
     [Parameter(ValueFromRemainingArguments)]
     [string[]]$ExtraArgs
@@ -29,22 +27,14 @@ $ErrorActionPreference = 'Stop'
 $env:DOTNET_BUILD_USE_MSBUILD_SERVER = 'false'
 
 # CLI-style aliases
-if ($ExtraArgs -contains '--detach') { $Detach = $true; $ExtraArgs = $ExtraArgs | Where-Object { $_ -ne '--detach' } }
 if ($ExtraArgs -contains '--use-msbuild') { $UseMSBuild = $true; $ExtraArgs = $ExtraArgs | Where-Object { $_ -ne '--use-msbuild' } }
 $extraArgs = $ExtraArgs
 
-# -- 1. Find csproj --
-if (-not $Project) {
-    $csprojFiles = Get-ChildItem -Path . -Filter "*.csproj" -Depth 0
-    if ($csprojFiles.Count -eq 1) {
-        $Project = $csprojFiles[0].Name
-    } elseif ($csprojFiles.Count -gt 1) {
-        Write-Error "Multiple .csproj files found. Specify: .\uno.ps1 <name>.csproj"
-        exit 1
-    } else {
-        Write-Error "No .csproj file found in current directory."
-        exit 1
-    }
+# -- 1. Set project path --
+$Project = "Agentic.Desktop\Agentic.Desktop.csproj"
+if (-not (Test-Path $Project)) {
+    Write-Error "Project not found: $Project"
+    exit 1
 }
 
 # -- 2. Detect desktop TFM from csproj --
@@ -143,14 +133,7 @@ if (-not $exe -or -not (Test-Path $exe)) {
 }
 
 Write-Host ""
-if ($Detach) {
-    Write-Host "--> Launching Uno Desktop app in background..." -ForegroundColor Cyan
-    Write-Host "    exe: $exe" -ForegroundColor DarkGray
-    $proc = Start-Process -FilePath $exe -PassThru
-    Write-Host "    PID: $($proc.Id)"
-} else {
-    Write-Host "--> Launching Uno Desktop app: $exe" -ForegroundColor Cyan
-    Write-Host "    The script will stay running while the app is open." -ForegroundColor DarkGray
-    Write-Host ""
-    & $exe
-}
+Write-Host "--> Launching Uno Desktop app: $exe" -ForegroundColor Cyan
+Write-Host "    exe: $exe" -ForegroundColor DarkGray
+$proc = Start-Process -FilePath $exe -PassThru
+Write-Host "    PID: $($proc.Id)"

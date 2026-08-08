@@ -23,18 +23,32 @@
 | Uno.WinUI | 6.6.166 |
 | CommunityToolkit.Mvvm | 8.4.2 |
 | Markdig | 1.3.2 |
-| ShihaoShen.Agentic.ACPLibrary | 0.1.0-nightly |
+| ShihaoShen.Agentic.ACPLibrary | 0.2.0 |
 
 ## 系统要求
 
-- Windows 10 1809 (Build 17763) 及以上
+- Windows 10 1809 (Build 17763) 或更高
 - [.NET SDK 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [WinApp CLI](https://learn.microsoft.com/windows/apps/windows-app-sdk/) (`dotnet tool install -g winapp`)
 - 开启 **开发者模式**（设置 > 系统 > 开发者选项）— 仅 WinUI / MSIX 目标需要
 
 ## 快速开始
 
-仓库附带两个便捷脚本（以及通用的 `BuildAndRun.ps1`）：
+> [!WARNING]
+> 在非 Windows 平台（Linux、macOS）上构建并不受官方支持，即便是 Uno Desktop 构建也是如此。为了获得更好的体验，建议使用 Windows（物理机、VMware、Parallel Desktop 等）进行开发。
+
+> [!IMPORTANT]
+> 如果你是在与 `ShihaoShen.Agentic.ACPLibrary` 库一起开发应用，请确保将两个仓库克隆到同一个父目录下，以便 `Agentic.Desktop` 项目能够引用本地库项目而不是 NuGet 包。
+>
+> 像这样：
+>
+> ```plaintext
+> AgenticDesktop-DevFolder/
+> ├── App/ (当前仓库)
+> └── ACPLibrary/ (库仓库)
+> ```
+
+仓库附带两个便捷脚本：
 
 | 脚本 | 目标 | 启动方式 | 需要开发者模式 |
 | ------ | ------ | ------ | -------------- |
@@ -49,7 +63,6 @@
 
 # Uno Desktop 构建（Skia，直接 exe）
 .\uno.ps1                    # 构建 + 前台运行
-.\uno.ps1 -Detach            # 构建 + 后台启动
 .\uno.ps1 -SkipRun           # 仅构建
 ```
 
@@ -78,7 +91,7 @@ Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
    - **Agent 路径** — 填写 ACP Agent 可执行文件路径（留空使用内置 Mock Agent）
    - **Agent 参数** — 可选的启动参数
    - **工作目录** — Agent 的工作目录
-3. 点击 **连接**，等待状态变为"已连接"
+3. 点击 **连接**，等待状态变为“已连接”
 4. 切换到 **聊天** 页面开始对话
 
 ## 项目结构
@@ -87,12 +100,19 @@ Agentic.Desktop\bin\x64\Debug\net10.0-desktop\Agentic.Desktop.exe
 App/
 ├── ViewModels/          # MVVM 视图模型
 │   ├── ChatViewModel.cs         # 聊天逻辑、流式消息处理
+│   ├── ChatListViewModel.cs     # 聊天会话列表管理
 │   ├── SettingsViewModel.cs     # Agent 连接管理
-│   └── Messages/ChatMessage.cs  # 消息模型
-├── Views/               # 对话框
-│   └── PermissionDialog.xaml    # 权限确认对话框
-├── Services/            # 基础服务
+│   └── Messages/
+│       ├── ChatMessage.cs       # 消息模型
+│       └── ChatSession.cs       # 聊天会话模型
+├── Views/               # 对话框和面板
+│   ├── ChatListPanel.xaml       # 聊天会话列表面板
+│   ├── ChatListPanel.xaml.cs
+│   ├── PermissionDialog.xaml    # 权限确认对话框
+│   └── PermissionDialog.xaml.cs
+├── Services/            # 核心服务
 │   ├── FileSystemHandler.cs     # 文件系统权限处理
+│   ├── LocalizationService.cs   # 本地化 / i18n
 │   ├── PermissionHandler.cs     # 权限请求 UI 调度
 │   ├── TerminalManager.cs       # 终端会话管理
 │   └── MarkdownHelper.cs        # Markdown 渲染

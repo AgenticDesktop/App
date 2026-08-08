@@ -66,6 +66,9 @@
   <data name="NavSettings.Content" xml:space="preserve">
     <value>設定</value>
   </data>
+  <data name="NavRegistry.Content" xml:space="preserve">
+    <value>登錄檔</value>
+  </data>
   <data name="StatusText.Text" xml:space="preserve">
     <value>已斷線</value>
   </data>
@@ -221,5 +224,65 @@
   <!-- C# Code Strings (TerminalManager.cs) -->
   <data name="StderrPrefix" xml:space="preserve">
     <value>[標準錯誤] </value>
+  </data>
+  <!-- Registry Page (RegistryPage.xaml) -->
+  <data name="RegistryRefresh.Content" xml:space="preserve">
+    <value>重新整理</value>
+  </data>
+  <data name="RegistryLaunch.Content" xml:space="preserve">
+    <value>啟動</value>
+  </data>
+  <data name="RegistryInstalledBadge.Text" xml:space="preserve">
+    <value>已安裝</value>
+  </data>
+  <data name="RegistryNotInstalled.Text" xml:space="preserve">
+    <value>本機未安裝</value>
+  </data>
+  <data name="RegistryNoSelection.Text" xml:space="preserve">
+    <value>選取一個 Agent 以檢視詳細資料</value>
+  </data>
+  <data name="RegistryUpdateAvailable.Text" xml:space="preserve">
+    <value>有可用更新</value>
+  </data>
+  <data name="RegistryRepositoryLabel.Text" xml:space="preserve">
+    <value>存放庫</value>
+  </data>
+  <data name="RegistryWebsiteLabel.Text" xml:space="preserve">
+    <value>網站</value>
+  </data>
+  <data name="RegistryAuthorsLabel.Text" xml:space="preserve">
+    <value>作者</value>
+  </data>
+  <data name="RegistryLicenseLabel.Text" xml:space="preserve">
+    <value>授權</value>
+  </data>
+
+  <!-- C# Code Strings (RegistryViewModel.cs + RegistryAgentItem.cs) -->
+  <data name="RegistryStatusLoading" xml:space="preserve">
+    <value>正在載入登錄檔...</value>
+  </data>
+  <data name="RegistryStatusLoaded" xml:space="preserve">
+    <value>已載入 {0} 個 Agent</value>
+  </data>
+  <data name="RegistryStatusEmpty" xml:space="preserve">
+    <value>找不到任何 Agent</value>
+  </data>
+  <data name="RegistryStatusError" xml:space="preserve">
+    <value>載入登錄檔失敗: {0}</value>
+  </data>
+  <data name="RegistryLaunching" xml:space="preserve">
+    <value>正在啟動 {0}...</value>
+  </data>
+  <data name="RegistryLaunchSuccess" xml:space="preserve">
+    <value>已啟動 {0}</value>
+  </data>
+  <data name="RegistryLaunchFailed" xml:space="preserve">
+    <value>啟動失敗: {0}</value>
+  </data>
+  <data name="RegistryNpmBadge" xml:space="preserve">
+    <value>npm</value>
+  </data>
+  <data name="RegistryUvxBadge" xml:space="preserve">
+    <value>uvx</value>
   </data>
 </root>

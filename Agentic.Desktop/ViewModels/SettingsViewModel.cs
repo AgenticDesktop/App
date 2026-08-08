@@ -26,6 +26,10 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string _workingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
+    /// <summary>Extra environment variables for the agent process (set when launched from the registry page).</summary>
+    [ObservableProperty]
+    private IReadOnlyDictionary<string, string>? _agentEnvironment;
+
     [ObservableProperty]
     private string _connectionStatus = LocalizationService.Get("StatusNotConnected");
 
@@ -81,7 +85,7 @@ public partial class SettingsViewModel : ObservableObject
             {
                 // Resolve command name to full path (e.g., "npx" -> "C:\Program Files\nodejs\npx.cmd")
                 var resolvedPath = CommandResolver.ResolveCommand(AgentPath);
-                transport = new StdioAgentTransport(resolvedPath, AgentArguments, WorkingDirectory);
+                transport = new StdioAgentTransport(resolvedPath, AgentArguments, WorkingDirectory, AgentEnvironment);
             }
 
             var dispatcher = new JsonRpcDispatcher();
