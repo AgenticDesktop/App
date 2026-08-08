@@ -42,15 +42,18 @@
     <PackageReference Include="Markdig" Version="1.3.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.10" />
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\..\ACPLibrary\Agentic.ACPLibrary.csproj')">
     <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.2.0-beta.1" />
   </ItemGroup>
 
+  <!--
   <ItemGroup Condition="!Exists('..\..\ACPLibrary\Agentic.ACPLibrary.csproj')">
+    <PackageReference Include="ShihaoShen.Agentic.ACPLibrary" Version="0.2.0-beta.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\..\ACPLibrary\Agentic.ACPLibrary.csproj')">
     <ProjectReference Include="..\..\ACPLibrary\Agentic.ACPLibrary.csproj" />
   </ItemGroup>
+  -->
 
   <!-- Windows-only packages (override Uno.Sdk implicit WinAppSDK version) -->
   <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
