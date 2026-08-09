@@ -17,6 +17,21 @@ public partial class ChatViewModel : ObservableObject
     [ObservableProperty]
     private string _inputText = string.Empty;
 
+    /// <summary>Full list of slash commands currently advertised by the agent.</summary>
+    public ObservableCollection<AvailableCommand> AvailableCommands { get; } = new();
+
+    /// <summary>Commands matching the current input prefix (for the autocomplete popup).</summary>
+    public ObservableCollection<AvailableCommand> FilteredCommands { get; } = new();
+
+    [ObservableProperty]
+    private bool _isCommandPopupOpen;
+
+    [ObservableProperty]
+    private int _selectedCommandIndex = -1;
+
+    /// <summary>Query text after the leading slash for filtering available commands.</summary>
+    private string _commandQuery = string.Empty;
+
     [ObservableProperty]
     private bool _isAgentResponding;
 
@@ -82,6 +97,10 @@ public partial class ChatViewModel : ObservableObject
         _acpClient = client;
         _acpClient.SessionUpdated += OnSessionUpdated;
         IsAgentConnected = true;
+
+        // A new client/connection may come from a different agent, so drop any
+        // previously advertised commands and reset the autocomplete popup.
+        ResetCommands();
     }
 
     /// <summary>Clears messages for the current session (called on disconnect).</summary>
@@ -202,9 +221,113 @@ public partial class ChatViewModel : ObservableObject
                     }
                 });
                 break;
+
+            case AvailableCommandsUpdate cmdUpdate:
+                _dispatcherQueue.TryEnqueue(() =>
+                {
+                    AvailableCommands.Clear();
+                    foreach (var cmd in cmdUpdate.AvailableCommands)
+                    {
+                        AvailableCommands.Add(cmd);
+                    }
+
+                    // Refresh the popup against the current input, so the freshly
+                    // advertised commands show up immediately if the user is typing.
+                    RefreshCommandFilter();
+                });
+                break;
         }
 
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Recomputes which commands match the current input and whether the
+    /// autocomplete popup should be open. The popup only appears when the line
+    /// being edited starts with a slash (e.g. "/help").
+    /// </summary>
+    private void RefreshCommandFilter()
+    {
+        var (query, isSlashLine) = ParseCommandQuery(InputText);
+
+        if (!isSlashLine || AvailableCommands.Count == 0)
+        {
+            IsCommandPopupOpen = false;
+            FilteredCommands.Clear();
+            SelectedCommandIndex = -1;
+            _commandQuery = query;
+            return;
+        }
+
+        _commandQuery = query;
+        FilteredCommands.Clear();
+        foreach (var cmd in AvailableCommands)
+        {
+            if (string.IsNullOrEmpty(query) ||
+                cmd.Name.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                FilteredCommands.Add(cmd);
+            }
+        }
+
+        IsCommandPopupOpen = FilteredCommands.Count > 0;
+        SelectedCommandIndex = IsCommandPopupOpen ? 0 : -1;
+    }
+
+    /// <summary>
+    /// Parses the current input to detect an in-progress slash command on the
+    /// active line. Returns the text after the leading slash and whether the
+    /// active line qualifies as a slash-command line.
+    /// </summary>
+    private static (string Query, bool IsSlashLine) ParseCommandQuery(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return (string.Empty, false);
+
+        // The "active line" is everything after the last newline.
+        var lastNewLine = input.LastIndexOf('\n');
+        var activeLine = lastNewLine >= 0 ? input[(lastNewLine + 1)..] : input;
+
+        // A slash-command line starts with '/' and has no spaces yet.
+        if (!activeLine.StartsWith("/") || activeLine.Contains(' '))
+            return (string.Empty, false);
+
+        return (activeLine[1..], true);
+    }
+
+    /// <summary>
+    /// Called by the view when the input text changes, so the view model can
+    /// update the command autocomplete popup.
+    /// </summary>
+    public void OnInputTextChanged()
+    {
+        RefreshCommandFilter();
+    }
+
+    /// <summary>
+    /// Called by the view when the user picks a command (keyboard or mouse).
+    /// Replaces the in-progress "/query" on the active line with "/name ".
+    /// </summary>
+    public string ApplyCommand(AvailableCommand command)
+    {
+        if (command is null)
+            return InputText;
+
+        var lastNewLine = InputText.LastIndexOf('\n');
+        var prefix = lastNewLine >= 0 ? InputText[..(lastNewLine + 1)] : string.Empty;
+        var newText = prefix + command.Name + " ";
+        IsCommandPopupOpen = false;
+        SelectedCommandIndex = -1;
+        return newText;
+    }
+
+    private void ResetCommands()
+    {
+        AvailableCommands.Clear();
+        FilteredCommands.Clear();
+        IsCommandPopupOpen = false;
+        SelectedCommandIndex = -1;
+        _commandQuery = string.Empty;
     }
 
     [RelayCommand]

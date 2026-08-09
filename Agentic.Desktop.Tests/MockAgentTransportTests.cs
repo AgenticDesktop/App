@@ -75,6 +75,41 @@ public class MockAgentTransportTests
     }
 
     [Fact]
+    public async Task SendAsync_SessionNew_BroadcastsAvailableCommands()
+    {
+        await _transport.StartAsync();
+        var messages = new List<string>();
+        _transport.MessageReceived += msg => { messages.Add(msg); return Task.CompletedTask; };
+
+        await _transport.SendAsync("""{"jsonrpc":"2.0","method":"session/new","id":2}""");
+
+        // Expect the session/new response + the available_commands_update notification.
+        Assert.True(messages.Count >= 2, $"Expected at least 2 messages, got {messages.Count}");
+
+        var commandsMsg = messages.FirstOrDefault(m =>
+        {
+            using var d = JsonDocument.Parse(m);
+            return d.RootElement.TryGetProperty("method", out var method)
+                && method.GetString() == "session/update"
+                && d.RootElement.GetProperty("params").GetProperty("update")
+                    .TryGetProperty("sessionUpdate", out var su)
+                && su.GetString() == "available_commands_update";
+        });
+
+        Assert.NotNull(commandsMsg);
+
+        using var doc = JsonDocument.Parse(commandsMsg!);
+        var commands = doc.RootElement
+            .GetProperty("params").GetProperty("update")
+            .GetProperty("availableCommands");
+
+        Assert.Equal(3, commands.GetArrayLength());
+        Assert.Equal("/help", commands[0].GetProperty("name").GetString());
+        Assert.Equal("Clear the current conversation",
+            commands[1].GetProperty("description").GetString());
+    }
+
+    [Fact]
     public async Task SendAsync_SessionPrompt_StreamsChunksThenCompletes()
     {
         await _transport.StartAsync();

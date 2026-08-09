@@ -50,6 +50,41 @@ public sealed class MockAgentTransport : IAgentTransport
 
                 case "session/new":
                     await FireMessageAsync(BuildResponse(id, new { sessionId = "mock-session-001" }));
+
+                    // Broadcast the available slash commands right after the session is created.
+                    var commandsNotification = JsonSerializer.Serialize(new
+                    {
+                        jsonrpc = "2.0",
+                        method = "session/update",
+                        @params = new
+                        {
+                            sessionId = "mock-session-001",
+                            update = new
+                            {
+                                sessionUpdate = "available_commands_update",
+                                availableCommands = new object[]
+                                {
+                                    new
+                                    {
+                                        name = "/help",
+                                        description = "Show available commands and usage"
+                                    },
+                                    new
+                                    {
+                                        name = "/clear",
+                                        description = "Clear the current conversation"
+                                    },
+                                    new
+                                    {
+                                        name = "/summarize",
+                                        description = "Summarize this conversation so far",
+                                        input = new { unstructured = new { hint = "optional topic to focus on" } }
+                                    }
+                                }    
+                            } 
+                        }
+                    });
+                    await FireMessageAsync(commandsNotification);
                     break;
 
                 case "session/prompt":

@@ -58,8 +58,42 @@ public sealed partial class MainPage : Page
     public static bool CanSend(bool isConnected, string text) =>
         isConnected && !string.IsNullOrWhiteSpace(text);
 
+    /// <summary>x:Bind helper: collapse a TextBlock when a string is null/empty.</summary>
+    public static Visibility HasText(string? text) =>
+        string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
     private void InputTextBox_KeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
     {
+        // When the autocomplete popup is open, arrow keys / Enter / Tab drive selection
+        // and Esc closes the popup without disturbing the current input.
+        if (ViewModel.IsCommandPopupOpen)
+        {
+            switch (e.Key)
+            {
+                case Windows.System.VirtualKey.Down:
+                    e.Handled = true;
+                    MoveCommandSelection(1);
+                    return;
+                case Windows.System.VirtualKey.Up:
+                    e.Handled = true;
+                    MoveCommandSelection(-1);
+                    return;
+                case Windows.System.VirtualKey.Enter:
+                case Windows.System.VirtualKey.Tab:
+                    if (ViewModel.SelectedCommandIndex >= 0 &&
+                        ViewModel.SelectedCommandIndex < ViewModel.FilteredCommands.Count)
+                    {
+                        e.Handled = true;
+                        InsertCommand(ViewModel.FilteredCommands[ViewModel.SelectedCommandIndex]);
+                    }
+                    return;
+                case Windows.System.VirtualKey.Escape:
+                    e.Handled = true;
+                    ViewModel.IsCommandPopupOpen = false;
+                    return;
+            }
+        }
+
         if (e.Key == Windows.System.VirtualKey.Enter && !e.KeyStatus.WasKeyDown)
         {
             // Multiline input: Shift+Enter inserts a newline, Enter alone sends.
@@ -72,6 +106,45 @@ public sealed partial class MainPage : Page
             e.Handled = true;
             if (ViewModel.SendMessageCommand.CanExecute(null))
                 ViewModel.SendMessageCommand.Execute(null);
+        }
+    }
+
+    private void MoveCommandSelection(int delta)
+    {
+        var count = ViewModel.FilteredCommands.Count;
+        if (count == 0)
+            return;
+
+        var next = ViewModel.SelectedCommandIndex + delta;
+        if (next < 0)
+            next = 0;
+        if (next >= count)
+            next = count - 1;
+
+        ViewModel.SelectedCommandIndex = next;
+        if (CommandListView.ContainerFromIndex(next) is ListViewItem item)
+            item.StartBringIntoView();
+    }
+
+    private void InsertCommand(Agentic.ACPLibrary.Models.AvailableCommand command)
+    {
+        var newText = ViewModel.ApplyCommand(command);
+        InputTextBox.Text = newText;
+        InputTextBox.SelectionStart = newText.Length;
+        InputTextBox.SelectionLength = 0;
+        InputTextBox.Focus(FocusState.Programmatic);
+    }
+
+    private void InputTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        ViewModel.OnInputTextChanged();
+    }
+
+    private void CommandListView_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is Agentic.ACPLibrary.Models.AvailableCommand cmd)
+        {
+            InsertCommand(cmd);
         }
     }
 

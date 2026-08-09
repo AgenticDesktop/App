@@ -8,6 +8,7 @@
     xmlns:converters="using:Agentic.Desktop.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Agentic.Desktop.ViewModels"
+    xmlns:acp="using:Agentic.ACPLibrary.Models"
     xmlns:msg="using:Agentic.Desktop.ViewModels.Messages"
     xmlns:views="using:Agentic.Desktop.Views"
     mc:Ignorable="d"
@@ -46,6 +47,9 @@
 
         <!-- Converters -->
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <!-- Shared elevation shadow for floating surfaces (popup / flyout cards) -->
+        <ThemeShadow x:Key="SharedShadow" />
 
         <!-- Message template selector -->
         <local:ChatMessageTemplateSelector x:Key="ChatTemplateSelector"
@@ -118,7 +122,65 @@
                 <!-- Input area: floating composer card -->
                 <StackPanel Grid.Row="1" Padding="16,4,16,12"
                             MaxWidth="832" HorizontalAlignment="Stretch" Spacing="6">
-                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+
+                    <!-- Slash command autocomplete popup (grows upward from the composer) -->
+                    <Popup x:Name="CommandPopup"
+                           AutomationProperties.AutomationId="CommandAutocompletePopup"
+                           IsOpen="{x:Bind ViewModel.IsCommandPopupOpen, Mode=OneWay}"
+                           VerticalOffset="-6"
+                           ShouldConstrainToRootBounds="True">
+                        <Border x:Name="CommandPopupCard"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                BorderThickness="1"
+                                CornerRadius="{ThemeResource OverlayCornerRadius}"
+                                Padding="4"
+                                MaxWidth="800"
+                                Width="{x:Bind ComposerCard.ActualWidth, Mode=OneWay}"
+                                Shadow="{ThemeResource SharedShadow}">
+                            <ListView x:Name="CommandListView"
+                                      ItemsSource="{x:Bind ViewModel.FilteredCommands, Mode=OneWay}"
+                                      SelectedIndex="{x:Bind ViewModel.SelectedCommandIndex, Mode=TwoWay}"
+                                      MaxHeight="220"
+                                      SelectionMode="Single"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="CommandListView_ItemClick"
+                                      Background="Transparent"
+                                      BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="acp:AvailableCommand">
+                                        <Grid Padding="10,6" ColumnSpacing="10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{x:Bind Name, Mode=OneWay}"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                                                       VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{x:Bind Description, Mode=OneWay}"
+                                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Visibility="{x:Bind local:MainPage.HasText(Description), Mode=OneWay}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Border>
+                    </Popup>
+
+                    <Border x:Name="ComposerCard"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
                             BorderThickness="1"
                             CornerRadius="16"
@@ -144,7 +206,8 @@
                                      BorderThickness="0"
                                      Padding="0,4"
                                      IsEnabled="{x:Bind ViewModel.IsAgentConnected, Mode=OneWay}"
-                                     KeyDown="InputTextBox_KeyDown" />
+                                     KeyDown="InputTextBox_KeyDown"
+                                     TextChanged="InputTextBox_TextChanged" />
 
                             <!-- Action row -->
                             <Grid Grid.Row="1">
